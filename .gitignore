@@ -1,0 +1,56 @@
+# ===== Build artifacts =====
+build/
+cmake-build-*/
+out/
+
+# ===== CMake =====
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# ===== Binaries =====
+*.exe
+*.out
+*.app
+
+# ===== Object files =====
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+
+# ===== Shared libraries =====
+*.so
+*.dll
+*.dylib
+
+# ===== Debug / profiling =====
+*.pdb
+*.dSYM/
+*.prof
+*.log
+
+# ===== IDEs =====
+.vscode/
+.idea/
+*.user
+*.suo
+*.swp
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+
+# ===== Test output =====
+Testing/
+CTestTestfile.cmake
+
+# ===== Assets / renders =====
+renders/
+*.ppm
+*.png
+*.hdr
