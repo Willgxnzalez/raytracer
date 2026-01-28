@@ -1,8 +1,5 @@
 #include <gtest/gtest.h>
 #include "math/Vec3.h"
-#include <numbers>
-
-#define PI 3.14159
 
 TEST(Vec3Test, DefaultConstructor) {
     Vec3 v;
@@ -101,22 +98,13 @@ TEST(Vec3CrossTest, CrossProductRightHandRule) {
     Vec3 z_axis{0, 0, 1};
     
     // X × Y = Z (right-hand rule)
-    Vec3 result1 = cross(x_axis, y_axis);
-    EXPECT_NEAR(result1.x, 0.0, 1e-10);
-    EXPECT_NEAR(result1.y, 0.0, 1e-10);
-    EXPECT_NEAR(result1.z, 1.0, 1e-10);
+    EXPECT_EQ(cross(x_axis, y_axis), z_axis);
     
     // Y × Z = X
-    Vec3 result2 = cross(y_axis, z_axis);
-    EXPECT_NEAR(result2.x, 1.0, 1e-10);
-    EXPECT_NEAR(result2.y, 0.0, 1e-10);
-    EXPECT_NEAR(result2.z, 0.0, 1e-10);
+    EXPECT_EQ(cross(y_axis, z_axis), x_axis);
     
     // Z × X = Y
-    Vec3 result3 = cross(z_axis, x_axis);
-    EXPECT_NEAR(result3.x, 0.0, 1e-10);
-    EXPECT_NEAR(result3.y, 1.0, 1e-10);
-    EXPECT_NEAR(result3.z, 0.0, 1e-10);
+    EXPECT_EQ(cross(z_axis, x_axis), y_axis);
 }
 
 TEST(Vec3CrossTest, CrossProductAnticommutative) {
@@ -134,24 +122,19 @@ TEST(Vec3CrossTest, CrossProductAnticommutative) {
 
 TEST(Vec3CrossTest, CrossProductWithParallelVectors) {
     Vec3 v1{2, 4, 6};
-    Vec3 v2{1, 2, 3};  // Parallel to v1 (v1 = 2*v2)
-    
-    Vec3 result = cross(v1, v2);
-    
+    Vec3 v2{1, 2, 3};
+    Vec3 zero{0, 0, 0};
+
     // Cross product of parallel vectors is zero vector
-    EXPECT_NEAR(result.x, 0.0, 1e-10);
-    EXPECT_NEAR(result.y, 0.0, 1e-10);
-    EXPECT_NEAR(result.z, 0.0, 1e-10);
+    EXPECT_EQ(cross(v1, v2), zero);
 }
 
 TEST(Vec3CrossTest, CrossProductWithSelf) {
     Vec3 v{3, 4, 5};
-    Vec3 result = cross(v, v);
-    
+    Vec3 zero{0, 0, 0};
+
     // A × A = 0 (vector crossed with itself is zero)
-    EXPECT_NEAR(result.x, 0.0, 1e-10);
-    EXPECT_NEAR(result.y, 0.0, 1e-10);
-    EXPECT_NEAR(result.z, 0.0, 1e-10);
+    EXPECT_EQ(cross(v, v), zero);
 }
 
 TEST(Vec3CrossTest, CrossProductMagnitude) {
@@ -184,22 +167,18 @@ TEST(Vec3CrossTest, CrossProductCalculation) {
 }
 
 TEST(Vec3CrossTest, CrossProductTriangleNormal) {
-    // Triangle vertices (counter-clockwise)
     Vec3 v0{0, 0, 0};
     Vec3 v1{1, 0, 0};
     Vec3 v2{0, 1, 0};
-    
-    Vec3 edge1 = v1 - v0;  // (1, 0, 0)
-    Vec3 edge2 = v2 - v0;  // (0, 1, 0)
-    
-    Vec3 normal = cross(edge1, edge2);
-    
-    // Normal should point in +Z direction for CCW triangle
-    EXPECT_NEAR(normal.x, 0.0, 1e-10);
-    EXPECT_NEAR(normal.y, 0.0, 1e-10);
-    EXPECT_NEAR(normal.z, 1.0, 1e-10);
-}
+    Vec3 v3{0, 0, 1};
 
+    Vec3 edge1 = v1 - v0;
+    Vec3 edge2 = v2 - v0;
+
+    // Normal should point in +Z direction for CCW triangle
+    EXPECT_EQ(cross(edge1, edge2), v3);
+}
+    
 TEST(Vec3CrossTest, CrossProductScalarTripleProduct) {
     Vec3 v1{1, 0, 0};
     Vec3 v2{0, 1, 0};
