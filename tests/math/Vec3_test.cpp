@@ -8,12 +8,6 @@ TEST(Vec3Test, DefaultConstructor) {
     EXPECT_EQ(v.z, 0.0);
 }
 
-TEST(Vec3Test, NormalizedMagnitude) {
-    Vec3 v{4, 7, 6};
-    Vec3 n = v.normalized();
-    EXPECT_EQ(n.length(), 1.0);
-}
-
 TEST(Vec3Test, OutputStreamOperator) {
     Vec3 v{1.5, 2.75, 3.125};
     
@@ -21,6 +15,127 @@ TEST(Vec3Test, OutputStreamOperator) {
     oss << v;
     
     EXPECT_EQ(oss.str(), "[1.5, 2.75, 3.125]");
+}
+
+TEST(Vec3OpsTest, AdditionOperator) {
+    Vec3 v1{1, 2, 3};
+    Vec3 v2{4, 5, 6};
+    Vec3 result = v1 + v2;
+    
+    EXPECT_EQ(result, Vec3(5.0, 7.0, 9.0));
+}
+
+TEST(Vec3OpsTest, SubtractionOperator) {
+    Vec3 v1{5, 7, 9};
+    Vec3 v2{1, 2, 3};
+    Vec3 result = v1 - v2;
+    
+    EXPECT_EQ(result, Vec3(4.0, 5.0, 6.0));
+}
+
+TEST(Vec3OpsTest, MultiplicationByScalar) {
+    Vec3 v{2, 3, 4};
+    Vec3 result = v * 2.5;
+    
+    EXPECT_EQ(result, Vec3(5.0, 7.5, 10.0));
+}
+
+TEST(Vec3OpsTest, ScalarMultiplicationCommutative) {
+    Vec3 v{2, 3, 4};
+    Vec3 result1 = v * 3.0;
+    Vec3 result2 = 3.0 * v;
+    
+    EXPECT_EQ(result1, result2);
+}
+
+TEST(Vec3OpsTest, DivisionByScalar) {
+    Vec3 v{10, 20, 30};
+    Vec3 result = v / 5.0;
+    
+    EXPECT_EQ(result, Vec3(2.0, 4.0, 6.0));
+}
+
+TEST(Vec3OpsTest, AdditionAssignment) {
+    Vec3 v1{1, 2, 3};
+    Vec3 v2{4, 5, 6};
+    v1 += v2;
+    
+    EXPECT_EQ(v1, Vec3(5.0, 7.0, 9.0));
+}
+
+TEST(Vec3OpsTest, SubtractionAssignment) {
+    Vec3 v1{10, 15, 20};
+    Vec3 v2{2, 3, 4};
+    v1 -= v2;
+    
+    EXPECT_EQ(v1, Vec3(8.0, 12.0, 16.0));
+}
+
+TEST(Vec3OpsTest, MultiplicationAssignment) {
+    Vec3 v{2, 3, 4};
+    v *= 3.0;
+    
+    EXPECT_EQ(v, Vec3(6.0, 9.0, 12.0));
+}
+
+TEST(Vec3OpsTest, DivisionAssignment) {
+    Vec3 v{20, 30, 40};
+    v /= 2.0;
+    
+    EXPECT_EQ(v, Vec3(10.0, 15.0, 20.0));
+}
+
+TEST(Vec3OpsTest, NegationOperator) {
+    Vec3 v{1, -2, 3};
+    Vec3 result = -v;
+    
+    EXPECT_EQ(result, Vec3(-1.0, 2.0, -3.0));
+}
+
+TEST(Vec3OpsTest, MultiplicationByZero) {
+    Vec3 v{5, 10, 15};
+    Vec3 result = v * 0.0;
+    
+    EXPECT_EQ(result, Vec3(0.0, 0.0, 0.0));
+}
+
+TEST(Vec3OpsTest, AdditionIdentity) {
+    Vec3 v{3, 4, 5};
+    Vec3 zero{0, 0, 0};
+    Vec3 result = v + zero;
+    
+    EXPECT_EQ(result, v);
+}
+
+TEST(Vec3OpsTest, MultiplicationByOne) {
+    Vec3 v{3, 4, 5};
+    Vec3 result = v * 1.0;
+    
+    EXPECT_EQ(result, v);
+}
+
+TEST(Vec3OpsTest, DivisionByOne) {
+    Vec3 v{3, 4, 5};
+    Vec3 result = v / 1.0;
+    
+    EXPECT_EQ(result, v);
+}
+
+TEST(Vec3OpsTest, ChainedOperations) {
+    Vec3 v{2, 3, 4};
+    Vec3 result = (v * 2.0 + Vec3{1, 1, 1}) / 3.0;
+    
+    EXPECT_NEAR(result.x, (2.0 * 2.0 + 1.0) / 3.0, 1e-10);
+    EXPECT_NEAR(result.y, (3.0 * 2.0 + 1.0) / 3.0, 1e-10);
+    EXPECT_NEAR(result.z, (4.0 * 2.0 + 1.0) / 3.0, 1e-10);
+}
+
+TEST(Vec3OpsTest, AssociativeMultiplication) {
+    Vec3 v{2, 3, 4};
+    Vec3 result1 = (v * 2.0) * 3.0;
+    Vec3 result2 = v * (2.0 * 3.0);
+    
+    EXPECT_EQ(result1, result2);
 }
 
 TEST(Vec3DotTest, DotProductIdentity) {

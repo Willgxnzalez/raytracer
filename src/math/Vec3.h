@@ -79,7 +79,11 @@ inline Vec3 operator*(const Vec3& v, double s) {
 }
 
 inline Vec3 operator*(double s, const Vec3& v) {
-    return Vec3(v.x * s, v.y * s, v.z * s);
+    return v * s;
+}
+
+inline Vec3 operator/(const Vec3& v, double s) {
+    return v * (1/s);
 }
 
 inline bool operator==(const Vec3& a, const Vec3& b) {
