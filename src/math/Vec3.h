@@ -14,15 +14,15 @@ struct Vec3 {
     Vec3(): x(0.0), y(0.0), z(0.0) {}
     Vec3(double _x, double _y, double _z) : x(_x), y(_y), z(_z) {}
 
-    double magnitude() const {
+    double length() const {
         return std::sqrt(x * x + y * y + z * z);
     }
-    double magnitudeSquared() const {
+    double lengthSquared() const {
         return x * x + y * y + z * z;
     }
 
     Vec3 normalized() const {
-        double mag = magnitude();
+        double mag = length();
         return Vec3(x / mag, y / mag, z / mag);
     }
 
@@ -33,7 +33,7 @@ struct Vec3 {
         return i == 0 ? x : (i == 1 ? y : z);
     }
 
-    Vec3 operator-() {
+    Vec3 operator-() const {
         return Vec3(-x, -y, -z);
     }
 

@@ -11,7 +11,7 @@ TEST(Vec3Test, DefaultConstructor) {
 TEST(Vec3Test, NormalizedMagnitude) {
     Vec3 v{4, 7, 6};
     Vec3 n = v.normalized();
-    EXPECT_EQ(n.magnitude(), 1.0);
+    EXPECT_EQ(n.length(), 1.0);
 }
 
 TEST(Vec3Test, OutputStreamOperator) {
@@ -29,7 +29,7 @@ TEST(Vec3DotTest, DotProductIdentity) {
     Vec3 v2{4, 5, 6};
     
     double dot_product = dot(v1, v2);
-    double magnitudes = v1.magnitude() * v2.magnitude();
+    double magnitudes = v1.length() * v2.length();
     double cos_angle = dot_product / magnitudes;
     
     // cos(angle) should be between -1 and 1
@@ -41,21 +41,21 @@ TEST(Vec3DotTest, DotProductIdentity) {
 }
 
 TEST(Vec3DotTest, DotProductWithParallelVectors) {
-    Vec3 v1{3, 4, 0};  // magnitude = 5
-    Vec3 v2{6, 8, 0};  // magnitude = 10, same direction
+    Vec3 v1{3, 4, 0};  // length = 5
+    Vec3 v2{6, 8, 0};  // length = 10, same direction
     
     double d = dot(v1, v2);
-    double expected = v1.magnitude() * v2.magnitude();  // cos(0) = 1
+    double expected = v1.length() * v2.length();  // cos(0) = 1
     
     EXPECT_NEAR(d, expected, 1e-10);
 }
 
 TEST(Vec3DotTest, DotProductWithAntiparallelVectors) {
-    Vec3 v1{3, 4, 0};   // magnitude = 5
-    Vec3 v2{-3, -4, 0}; // magnitude = 5, opposite direction
+    Vec3 v1{3, 4, 0};   // length = 5
+    Vec3 v2{-3, -4, 0}; // length = 5, opposite direction
     
     double d = dot(v1, v2);
-    double expected = -v1.magnitude() * v2.magnitude();  // cos(180deg) = -1
+    double expected = -v1.length() * v2.length();  // cos(180deg) = -1
     
     EXPECT_NEAR(d, expected, 1e-10);
 }
@@ -138,16 +138,16 @@ TEST(Vec3CrossTest, CrossProductWithSelf) {
 }
 
 TEST(Vec3CrossTest, CrossProductMagnitude) {
-    Vec3 v1{3, 0, 0};  // magnitude = 3
-    Vec3 v2{0, 4, 0};  // magnitude = 4, perpendicular to v1
+    Vec3 v1{3, 0, 0};  // length = 3
+    Vec3 v2{0, 4, 0};  // length = 4, perpendicular to v1
     
     Vec3 result = cross(v1, v2);
     
     // |A × B| = |A||B|sin(angle)
     // For perpendicular vectors, sin(90deg) = 1
-    double expected_magnitude = v1.magnitude() * v2.magnitude();
+    double expected_magnitude = v1.length() * v2.length();
     
-    EXPECT_NEAR(result.magnitude(), expected_magnitude, 1e-10);
+    EXPECT_NEAR(result.length(), expected_magnitude, 1e-10);
 }
 
 TEST(Vec3CrossTest, CrossProductCalculation) {
