@@ -7,7 +7,7 @@
 
 TEST(HittableListTest, SingleSphere) {
     HittableList scene;
-    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0));
+    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0, nullptr));
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
     
     HitRecord record;
@@ -24,8 +24,8 @@ TEST(HittableListTest, SingleSphere) {
 
 TEST(HittableListTest, HitsNearestOfTwoSpheres) {
     HittableList scene;
-    scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0));
-    scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0));
+    scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0, nullptr));
+    scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0, nullptr));
     Ray ray{Vec3{0, 0, 0}, Vec3{1, 0, 0}};
     
     HitRecord record;
@@ -42,8 +42,8 @@ TEST(HittableListTest, HitsNearestOfTwoSpheres) {
 
 TEST(HittableListTest, RayMissesSpheres) {
     HittableList scene;
-    scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0));
-    scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0));
+    scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0, nullptr));
+    scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0, nullptr));
     Ray ray{Vec3{0, 5, 0}, Vec3{1, 0, 0}};
 
     HitRecord record;
@@ -55,8 +55,8 @@ TEST(HittableListTest, RayMissesSpheres) {
 TEST(HittableListTest, OverlappingSpheres) {
     HittableList scene;
     // Two spheres overlapping at origin
-    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 2.0));
-    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0));
+    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 2.0, nullptr));
+    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0, nullptr));
     
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
     HitRecord record;

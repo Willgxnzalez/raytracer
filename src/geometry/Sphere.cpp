@@ -3,7 +3,7 @@
 #include "materials/Material.h"
 #include "math/Ray.h"
 
-Sphere::Sphere(const Vec3& _center, double _radius): center(_center), radius(_radius) {}
+Sphere::Sphere(const Vec3& _center, double _radius, const Material* _material): center(_center), radius(_radius), material(_material) {}
 
 bool Sphere::hit(const Ray& ray, double tMin, double tMax, HitRecord& record) const {
     // Vector from ray origin to center
@@ -32,5 +32,6 @@ bool Sphere::hit(const Ray& ray, double tMin, double tMax, HitRecord& record) co
     record.position = ray.at(t);
     Vec3 outwardNormal = (record.position - center) / radius;
     record.setFaceNormal(ray.direction, outwardNormal);
+    record.material = material;
     return true;
 }
