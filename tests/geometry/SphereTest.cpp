@@ -84,3 +84,4 @@ TEST(SphereTest, RayIsTangentToSphere) {
     EXPECT_TRUE(hit);
     EXPECT_EQ(record.position, Vec3(0.0, 1.0, 0.0));
 }
+

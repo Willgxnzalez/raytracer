@@ -21,7 +21,7 @@ struct Sphere : public Hittable {
 
         if (discriminant < 0) return false;
 
-        // t = (-halfB +/- sqrt(discriminat)) / a
+        // t = (-halfB +/- sqrt(discriminant)) / a
         double tMinus = (-halfB - std::sqrt(discriminant)) / a;
         double tPlus = (-halfB + std::sqrt(discriminant)) / a;
 
