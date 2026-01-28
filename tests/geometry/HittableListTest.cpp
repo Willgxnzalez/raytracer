@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "geometry/HittableList.h"
 #include "geometry/Sphere.h"
+#include "math/Ray.h"
+#include "core/HitRecord.h"
 #include <memory>
 
 TEST(HittableListTest, SingleSphere) {

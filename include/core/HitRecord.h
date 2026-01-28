@@ -1,8 +1,8 @@
 #pragma once
 #include "../math/Vec3.h"
-#include "../math/Ray.h"
-#include "../materials/Material.h"
 #include <cassert>
+
+struct Material; // forward declare
 
 /**
  * HitRecord - A data packet receipt that describes a ray-surface intersection and 
@@ -16,10 +16,10 @@ struct HitRecord {
     bool frontFace;
     const Material* material;
 
-    inline void setFaceNormal(const Ray& ray, const Vec3& outwardNormal) {
+    inline void setFaceNormal(const Vec3& rayDirection, const Vec3& outwardNormal) {
         assert(std::abs(outwardNormal.lengthSquared() - 1.0) < 1e-6);
 
-        frontFace = dot(ray.direction, outwardNormal) < 0;
+        frontFace = dot(rayDirection, outwardNormal) < 0;
         surfaceNormal = frontFace ? outwardNormal : -outwardNormal;
     }
 };

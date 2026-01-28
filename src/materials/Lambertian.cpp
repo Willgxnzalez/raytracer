@@ -1,4 +1,6 @@
-#include "Lambertian.h"
+#include "materials/Lambertian.h"
+#include "core/HitRecord.h"
+#include "math/Ray.h"
 #include <random>
 
 Vec3 randomInUnitSphere() {

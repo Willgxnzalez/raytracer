@@ -1,6 +1,8 @@
 #pragma once
-#include "../math/Ray.h"
-#include "../core/HitRecord.h"
+
+// forward declare
+struct Ray;
+struct HitRecord;
 
 /**
  * Hittable - interface for surfaces that can be hit by rays.

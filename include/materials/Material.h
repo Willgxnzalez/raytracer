@@ -1,13 +1,12 @@
 #pragma once
 #include "../math/Ray.h"
 #include "../math/Vec3.h"
-#include "../core/HitRecord.h"
 
+struct HitRecord; // forward declare
 
 /**
  * Material - interface for describing light interaction on a surface.
  */
-
 struct Material {
     virtual ~Material() = default;
 

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "geometry/Sphere.h"
+#include "core/HitRecord.h"
 #include "math/Ray.h"
 
 /* 
