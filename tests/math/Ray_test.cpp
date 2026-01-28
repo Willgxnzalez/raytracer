@@ -19,6 +19,16 @@ TEST(RayTest, Constructor) {
     EXPECT_EQ(r.direction, direction);
 }
 
+TEST(RayTest, CopyConstructor) {
+    Vec3 origin{1, 2, 3};
+    Vec3 direction{4, 5, 6};
+    Ray r{origin, direction};
+    Ray r2{r};
+    
+    EXPECT_EQ(r2.origin, origin);
+    EXPECT_EQ(r2.direction, direction);
+}
+
 TEST(RayTest, AtTimeZeroIsOrigin) {
     Vec3 origin{1, 2, 3};
     Vec3 direction{4, 5, 6}; 

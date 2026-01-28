@@ -8,8 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(src)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
-list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 
+# Main executable
+list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 add_executable(raytracer src/main.cpp ${SOURCES})
 
 include (FetchContent)
