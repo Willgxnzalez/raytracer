@@ -1,0 +1,69 @@
+#include <gtest/gtest.h>
+#include "geometry/HittableList.h"
+#include "geometry/Sphere.h"
+#include <memory>
+
+TEST(HittableListTest, SingleSphere) {
+    HittableList scene;
+    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0));
+    Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
+    
+    HitRecord record;
+    bool hit = scene.hit(ray, 0.0, 100.0, record);
+    
+    EXPECT_TRUE(hit);
+    
+    // Ray should hit at x = -1 (left side of sphere)
+    EXPECT_EQ(record.position, Vec3(-1, 0, 0));
+    
+    // Normal should point outward (to the left)
+    EXPECT_EQ(record.surfaceNormal, Vec3(-1, 0, 0));
+}
+
+TEST(HittableListTest, HitsNearestOfTwoSpheres) {
+    HittableList scene;
+    scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0));
+    scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0));
+    Ray ray{Vec3{0, 0, 0}, Vec3{1, 0, 0}};
+    
+    HitRecord record;
+    bool hit = scene.hit(ray, 0.0, 100.0, record);
+    
+    EXPECT_TRUE(hit);
+    
+    // Ray should hit left side of first sphere at x = 4
+    EXPECT_EQ(record.position, Vec3(4, 0, 0));
+    
+    // Normal should point outward (to the left)
+    EXPECT_EQ(record.surfaceNormal, Vec3(-1, 0, 0));
+}
+
+TEST(HittableListTest, RayMissesSpheres) {
+    HittableList scene;
+    scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0));
+    scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0));
+    Ray ray{Vec3{0, 5, 0}, Vec3{1, 0, 0}};
+
+    HitRecord record;
+    bool hit = scene.hit(ray, 0.0, 100.0, record);
+    
+    EXPECT_FALSE(hit);
+}
+
+TEST(HittableListTest, OverlappingSpheres) {
+    HittableList scene;
+    // Two spheres overlapping at origin
+    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 2.0));
+    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0));
+    
+    Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
+    HitRecord record;
+    
+    bool hit = scene.hit(ray, 0.0, 100.0, record);
+    
+    EXPECT_TRUE(hit);
+    
+    // Should hit the larger sphere first (at x=-2)
+    EXPECT_EQ(record.position, Vec3(-2, 0, 0));
+    EXPECT_NEAR(record.t, 3.0, 1e-10);  // Distance from -5 to -2
+}
