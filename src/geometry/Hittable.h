@@ -3,7 +3,7 @@
 #include "../core/HitRecord.h"
 
 /**
- * Hittable - interface for surfaces that can be hit by rays
+ * Hittable - interface for surfaces that can be hit by rays.
  */
 struct Hittable {
     virtual ~Hittable() = default;

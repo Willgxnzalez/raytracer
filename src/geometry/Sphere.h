@@ -1,11 +1,13 @@
 #pragma once
 #include "Hittable.h"
 #include "../math/Vec3.h"
+#include "../materials/Material.h"
 #include <cmath>
 
 struct Sphere : public Hittable {
     Vec3 center;
     double radius;
+    const Material* material;
 
     Sphere(const Vec3& _center, double _radius): center(_center), radius(_radius) {}
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "../math/Vec3.h"
 #include "../math/Ray.h"
+#include "../materials/Material.h"
 #include <cassert>
 
 /**
@@ -13,6 +14,7 @@ struct HitRecord {
     Vec3 surfaceNormal;
     double t;
     bool frontFace;
+    const Material* material;
 
     inline void setFaceNormal(const Ray& ray, const Vec3& outwardNormal) {
         assert(std::abs(outwardNormal.lengthSquared() - 1.0) < 1e-6);
