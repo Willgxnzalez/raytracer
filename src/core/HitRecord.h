@@ -1,6 +1,6 @@
 #pragma once
 #include "../math/Vec3.h"
-#include "Ray.h"
+#include "../math/Ray.h"
 #include <cassert>
 
 /**
