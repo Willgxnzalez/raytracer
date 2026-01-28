@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "core/Ray.h"
+#include "math/Ray.h"
 
 TEST(RayTest, DefaultConstructor) {
     Vec3 origin{0, 0, 0};

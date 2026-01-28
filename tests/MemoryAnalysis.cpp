@@ -2,7 +2,7 @@
 #include <iostream>
 #include <type_traits>
 #include "math/Vec3.h"
-#include "core/Ray.h"
+#include "math/Ray.h"
 
 template<typename T>
 void analyze_type(const char* name) {

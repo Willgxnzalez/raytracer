@@ -1,5 +1,5 @@
 #pragma once
-#include "../core/Ray.h"
+#include "../math/Ray.h"
 #include "../core/HitRecord.h"
 
 /**
