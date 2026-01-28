@@ -26,6 +26,11 @@ struct Vec3 {
         return Vec3(x / mag, y / mag, z / mag);
     }
 
+    bool nearZero() const {
+        constexpr double s = 1e-8;
+        return (std::fabs(x) < s) && (std::fabs(y) < s) && (std::fabs(z) < s);
+    }
+
     double operator[](int i) const {
         return i == 0 ? x : (i == 1 ? y : z);
     }
