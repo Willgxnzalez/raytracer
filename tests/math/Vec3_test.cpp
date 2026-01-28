@@ -17,6 +17,15 @@ TEST(Vec3Test, NormalizedMagnitude) {
     EXPECT_EQ(n.magnitude(), 1.0);
 }
 
+TEST(Vec3Test, OutputStreamOperator) {
+    Vec3 v{1.5, 2.75, 3.125};
+    
+    std::ostringstream oss;
+    oss << v;
+    
+    EXPECT_EQ(oss.str(), "[1.5, 2.75, 3.125]");
+}
+
 TEST(Vec3DotTest, DotProductIdentity) {
     // Test: A·B = |A||B|cos(angle)
     Vec3 v1{1, 2, 3};

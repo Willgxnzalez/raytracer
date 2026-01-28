@@ -84,3 +84,8 @@ inline Vec3 cross(const Vec3& a, const Vec3& b) { // Gives Vector perpendicular 
                 a.z * b.x - a.x * b.z,
                 a.x * b.y - a.y * b.x);
 }
+
+std::ostream & operator << ( std::ostream & out, Vec3 v) {
+    out << "[" << v.x << ", " << v.y << ", " << v.z << "]";
+    return out;
+}
