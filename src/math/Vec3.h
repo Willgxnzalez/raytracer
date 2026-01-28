@@ -1,6 +1,13 @@
 #pragma once
 #include <cmath>
+#include <ostream>
 
+/**
+ * Vec3 - 3D vector class for representing points, directions, and colors.
+ * Type aliases:
+ *   - point3: Represents a position in 3D space
+ *   - color: Represents RGB color values
+ */
 struct Vec3 {
     double x, y, z;
 
@@ -75,6 +82,10 @@ inline Vec3 operator*(double s, const Vec3& v) {
     return Vec3(v.x * s, v.y * s, v.z * s);
 }
 
+inline bool operator==(const Vec3& a, const Vec3& b) {
+    return a.x == b.x && a.y == b.y && a.z == b.z;
+}
+
 inline double dot(const Vec3& a, const Vec3& b) { // How much 2 vectors align
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
@@ -85,7 +96,7 @@ inline Vec3 cross(const Vec3& a, const Vec3& b) { // Gives Vector perpendicular 
                 a.x * b.y - a.y * b.x);
 }
 
-std::ostream & operator << ( std::ostream & out, Vec3 v) {
+inline std::ostream & operator << ( std::ostream & out, Vec3 v) {
     out << "[" << v.x << ", " << v.y << ", " << v.z << "]";
     return out;
 }
