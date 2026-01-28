@@ -12,6 +12,11 @@ struct HittableList : public Hittable {
         objects.push_back(object);
     }
 
+    void clear() {
+        objects.clear();
+    }
+
+
     bool hit(const Ray& ray, double tMin, double tMax, HitRecord& record) const override {
         HitRecord tempRecord;
         double tClosest = tMax;
