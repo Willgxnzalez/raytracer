@@ -6,7 +6,12 @@
 Sphere::Sphere(const Vec3& _center, double _radius, const Material* _material): center(_center), radius(_radius), material(_material) {}
 
 bool Sphere::hit(const Ray& ray, double tMin, double tMax, HitRecord& record) const {
-    // Vector from ray origin to center
+    // Points on sphere: |P - C|^2 = r^2 -> point P on sphere if its distance from center C is equal to radius
+    // Points on ray:     P = O + tD 
+    // Substitute: |O + tD - C|^2 = r^2
+    // Rearrange: |(O - C) + tD|^2 = r^2 where (O - C) becomes vector oc
+    // Expand: (D·D)t^2 + 2(D·oc)t + (oc·oc - r^2) = 0
+    // Use "half-b" quadratic formula t = (-(b/2) +/- sqrt((b/2)^2-ac)) / a
     Vec3 oc = ray.origin - center;
     
     // Discriminant

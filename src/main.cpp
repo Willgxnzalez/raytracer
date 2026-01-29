@@ -10,6 +10,7 @@
 #include "materials/Material.h"
 #include "materials/Lambertian.h"
 #include "renderer/rayColor.h"
+#include "renderer/Camera.h"
 
 int main() {
     // Image
@@ -34,18 +35,14 @@ int main() {
     Lambertian cyan(Vec3(0.1, 0.8, 0.8));
 
     // Spheres
-    world.add(std::make_shared<Sphere>(Vec3(0,0,-2), 0.5, &red));
+    world.add(std::make_shared<Sphere>(Vec3(0, 0, -2), 0.5, &red));
     world.add(std::make_shared<Sphere>(Vec3(0,-100.5,-1), 100, &green)); // ground
     world.add(std::make_shared<Sphere>(Vec3(-1, 0, -1), 0.5, &blue));
     world.add(std::make_shared<Sphere>(Vec3(1, 0, -1), 0.5, &yellow));
     world.add(std::make_shared<Sphere>(Vec3(0, 1, -1), 0.5, &cyan));
 
     // Camera
-    Vec3 lowerLeftCorner(-2.0, -1.0, -1.0);
-    Vec3 horizontal(4.0, 0.0, 0.0);
-    Vec3 vertical(0.0, 2.0, 0.0);
-    Vec3 origin(0.0, 0.0, 0.0);
-
+    Camera camera{imageWidth, imageHeight, 90.0};
     // Output to file
     std::string outputPath = "C:/Users/Owner/Projects/raytracer/output.ppm";
     std::ofstream outFile(outputPath);
@@ -56,7 +53,7 @@ int main() {
     }
     
     std::cerr << "Writing to " << outputPath << std::endl;
-    
+
     // Output PPM header
     outFile << "P3\n" << imageWidth << " " << imageHeight << "\n255\n";
 
@@ -65,10 +62,7 @@ int main() {
         for (int i = 0; i < imageWidth; ++i) {
             Vec3 pixelColor(0,0,0);
             for (int s = 0; s < samplesPerPixel; ++s) {
-                double u = (i + dis(gen)) / (imageWidth-1);
-                double v = (j + dis(gen)) / (imageHeight-1);
-                Vec3 dir = lowerLeftCorner + u*horizontal + v*vertical - origin;
-                Ray r(origin, dir);
+                Ray r = camera.shootRay(i, j);
                 pixelColor += rayColor(r, world, maxDepth);
             }
             // Average samples and gamma correction

@@ -5,7 +5,7 @@
 
 Vec3 randomInUnitSphere() {
     static std::mt19937 gen(std::random_device{}());
-    std::uniform_real_distribution<> dis(-1.0, 1.0);
+    static std::uniform_real_distribution<double> dis(-1.0, 1.0);
     while(true) {
         Vec3 v{dis(gen), dis(gen), dis(gen)};
         if (v.lengthSquared() < 1) return v;
