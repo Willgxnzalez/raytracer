@@ -15,23 +15,40 @@ double randomOffset() {
     return dis(gen);
 }
 
-Camera::Camera(int _imageWidth, int _imageHeight, double vFov)
-    : imageWidth(_imageWidth), imageHeight(_imageHeight), focalLength(1.0)
+Camera::Camera(
+    const Vec3& lookFrom, 
+    const Vec3& lookAt, 
+    const Vec3& vUp, 
+    int _imageWidth, 
+    int _imageHeight, 
+    double vFovDegrees
+)
+    : origin(lookFrom), imageWidth(_imageWidth), imageHeight(_imageHeight), focalLength(1.0)
 {
     double aspectRatio = static_cast<double>(imageWidth) / static_cast<double>(imageHeight);
-    double theta = degreesToRadians(vFov);
+    double theta = degreesToRadians(vFovDegrees);
     double viewportHeight = std::tan(theta / 2) * focalLength * 2.0;
     double viewportWidth = viewportHeight * aspectRatio;
 
-    horizontal = Vec3(viewportWidth, 0, 0);
-    vertical = Vec3(0, viewportHeight, 0);
-    lowerLeftCorner = origin - horizontal / 2 - vertical / 2 - Vec3(0, 0, focalLength);
+    // Compute camera basis vectors
+    w = (lookFrom - lookAt).normalized(); // camera backward
+    u = cross(vUp, w).normalized(); // camera right
+    v = cross(w, u).normalized(); // camera up
+
+    Vec3 center = origin - focalLength * w; // move viewport plane forward focalLength units along −w vector
+    horizontal = u * viewportWidth;
+    vertical = v * viewportHeight;
+    lowerLeftCorner = center - horizontal / 2 - vertical / 2;
+    std::cout << "Camera center: " << center << std::endl
+              << "horizontal: " << horizontal << std::endl
+              << "vertical: " << vertical << std::endl
+              << "lowerLeftCorner: " << lowerLeftCorner << std::endl;
 }
 
 Ray Camera::shootRay(int i, int j) const {
-    // Map pixel to normalized 3D coordinate inside viewport rectangle
+    // Map randomly sampled point with pixel(i, j) to normalized 3D coordinate inside viewport rectangle
     double u = (i + randomOffset()) / (imageWidth-1); // 0 (left edge) <= u <= 1 (right edge)
-    double v = (j + randomOffset()) / (imageHeight-1); // 0 (bottom edge) <= u <= 1 (top edge)
+    double v = (j + randomOffset()) / (imageHeight-1); // 0 (bottom edge) <= v <= 1 (top edge)
 
     Vec3 pointOnViewport = lowerLeftCorner + u*horizontal + v*vertical;
     return Ray{origin, pointOnViewport - origin}; // ray direction is pointOnViewport - origin = origin -> pointOnViewport
