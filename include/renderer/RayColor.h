@@ -8,7 +8,7 @@
 
 /**
  * Compute the color of a ray by iteratively tracing it through the scene, accumulating color from surface interactions
- * and material scattering until hitting the background or reaching max depth.
+ * and material scattering through multiplicative attenuation until hitting the background or reaching max depth.
  * 
  * @param ray Initial ray to trace
  * @param scene World containing all hittable objects
@@ -17,7 +17,7 @@
  */
 Vec3 rayColor(const Ray& ray, const Hittable& scene, int maxDepth) {
     Ray currentRay = ray;
-    Vec3 attenuation(1, 1, 1);  // Renamed for clarity
+    Vec3 attenuation(1, 1, 1); // Start with full intensity white light
 
     for (int depth = 0; depth < maxDepth; ++depth) {
         HitRecord rec;
