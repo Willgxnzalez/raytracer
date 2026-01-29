@@ -3,13 +3,14 @@
 #include <algorithm>
 #include <memory>
 #include <random>
+#include <filesystem>
 #include "math/Vec3.h"
 #include "math/Ray.h"
 #include "geometry/Sphere.h"
 #include "geometry/HittableList.h"
 #include "materials/Material.h"
 #include "materials/Lambertian.h"
-#include "renderer/rayColor.h"
+#include "renderer/RayColor.h"
 #include "renderer/Camera.h"
 
 int main() {
@@ -44,7 +45,7 @@ int main() {
     // Camera
     Camera camera{imageWidth, imageHeight, 90.0};
     // Output to file
-    std::string outputPath = "C:/Users/Owner/Projects/raytracer/output.ppm";
+    std::filesystem::path outputPath = std::filesystem::current_path() / "output.ppm";
     std::ofstream outFile(outputPath);
     
     if (!outFile.is_open()) {
