@@ -14,14 +14,19 @@ Vec3 randomInUnitSphere() {
 
 Lambertian::Lambertian(const Vec3& _albedo) : albedo(_albedo) {} 
 
-bool Lambertian::scatter(const Ray& rayIn, const HitRecord& record, Vec3& attenuation, Ray& scattered) const {
+bool Lambertian::scatter(
+    const HitRecord& record, 
+    const Ray& rayIn, 
+    Ray& rayOut,
+    Vec3& attenuation 
+) const {
     Vec3 scatteredDirection = record.surfaceNormal + randomInUnitSphere();
 
     if (scatteredDirection.nearZero()) {
         scatteredDirection = record.surfaceNormal;
     }
 
-    scattered = Ray{record.position, scatteredDirection};
+    rayOut = Ray{record.position, scatteredDirection};
     attenuation = albedo;
-    return true;
+    return true; // Always scatters light
 }

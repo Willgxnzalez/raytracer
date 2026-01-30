@@ -12,7 +12,7 @@ struct Vec3 {
     double x, y, z;
 
     Vec3(): x(0.0), y(0.0), z(0.0) {}
-    Vec3(double _x, double _y, double _z) : x(_x), y(_y), z(_z) {}
+    Vec3(double x, double y, double z) : x(x), y(y), z(z) {}
 
     double length() const {
         return std::sqrt(x * x + y * y + z * z);

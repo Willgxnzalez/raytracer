@@ -11,7 +11,7 @@ TEST(HittableListTest, SingleSphere) {
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
     
     HitRecord record;
-    bool hit = scene.hit(ray, 0.0, 100.0, record);
+    bool hit = scene.hit(record, ray, 0.0, 100.0);
     
     EXPECT_TRUE(hit);
     
@@ -29,7 +29,7 @@ TEST(HittableListTest, HitsNearestOfTwoSpheres) {
     Ray ray{Vec3{0, 0, 0}, Vec3{1, 0, 0}};
     
     HitRecord record;
-    bool hit = scene.hit(ray, 0.0, 100.0, record);
+    bool hit = scene.hit(record, ray, 0.0, 100.0);
     
     EXPECT_TRUE(hit);
     
@@ -47,7 +47,7 @@ TEST(HittableListTest, RayMissesSpheres) {
     Ray ray{Vec3{0, 5, 0}, Vec3{1, 0, 0}};
 
     HitRecord record;
-    bool hit = scene.hit(ray, 0.0, 100.0, record);
+    bool hit = scene.hit(record, ray, 0.0, 100.0);
     
     EXPECT_FALSE(hit);
 }
@@ -61,7 +61,7 @@ TEST(HittableListTest, OverlappingSpheres) {
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
     HitRecord record;
     
-    bool hit = scene.hit(ray, 0.0, 100.0, record);
+    bool hit = scene.hit(record, ray, 0.0, 100.0);
     
     EXPECT_TRUE(hit);
     

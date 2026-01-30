@@ -10,5 +10,19 @@ struct HitRecord; // forward declare
 struct Material {
     virtual ~Material() = default;
 
-    virtual bool scatter(const Ray& rayIn, const HitRecord& record, Vec3& attenuation, Ray& scattered) const = 0;
+    /**
+     * Compute how light scatters when hitting this material.
+     * 
+     * @param record Surface intersection details (position, normal, etc.)
+     * @param rayIn Incoming ray that hit the surface
+     * @param rayOut Output: scattered/reflected ray direction
+     * @param attenuation Output: color absorption (how much light is kept vs absorbed)
+     * @return true if ray scatters, false if ray is absorbed (stops bouncing)
+     */
+    virtual bool scatter(
+        const HitRecord& record, 
+        const Ray& rayIn, 
+        Ray& rayOut,
+        Vec3& attenuation 
+    ) const = 0;
 };

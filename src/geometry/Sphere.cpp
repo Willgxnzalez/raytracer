@@ -3,9 +3,15 @@
 #include "materials/Material.h"
 #include "math/Ray.h"
 
-Sphere::Sphere(const Vec3& _center, double _radius, const Material* _material): center(_center), radius(_radius), material(_material) {}
+Sphere::Sphere(const Vec3& center, double radius, const Material* material)
+    : center(center), radius(radius), material(material) {}
 
-bool Sphere::hit(const Ray& ray, double tMin, double tMax, HitRecord& record) const {
+bool Sphere::hit(
+    HitRecord& record,
+    const Ray& ray, 
+    double tMin, 
+    double tMax
+) const {
     // Points on sphere: |P - C|^2 = r^2 -> point P on sphere if its distance from center C is equal to radius
     // Points on ray:     P = O + tD 
     // Substitute: |O + tD - C|^2 = r^2
@@ -14,7 +20,7 @@ bool Sphere::hit(const Ray& ray, double tMin, double tMax, HitRecord& record) co
     // Use "half-b" quadratic formula t = (-(b/2) +/- sqrt((b/2)^2-ac)) / a
     Vec3 oc = ray.origin - center;
     
-    // Discriminant
+    // Discriminant = (b/2)^2-ac
     double a = dot(ray.direction, ray.direction);
     double halfB = dot(ray.direction, oc);
     double c = dot(oc, oc) - radius * radius;
@@ -22,7 +28,6 @@ bool Sphere::hit(const Ray& ray, double tMin, double tMax, HitRecord& record) co
 
     if (discriminant < 0) return false;
 
-    // t = (-halfB +/- sqrt(discriminant)) / a
     double tMinus = (-halfB - std::sqrt(discriminant)) / a;
     double tPlus = (-halfB + std::sqrt(discriminant)) / a;
 

@@ -12,7 +12,12 @@ struct Sphere : public Hittable {
     double radius;
     const Material* material;
 
-    Sphere(const Vec3& _center, double _radius, const Material* _material);
+    Sphere(const Vec3& center, double radius, const Material* material);
 
-    bool hit(const Ray& ray, double tMin, double tMax, HitRecord& record) const override;
+    bool hit(
+        HitRecord& record,
+        const Ray& ray, 
+        double tMin, 
+        double tMax
+    ) const override;
 };

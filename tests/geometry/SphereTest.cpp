@@ -19,7 +19,7 @@ TEST(SphereTest, RayHitsSphereAtCenter) {
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
 
     HitRecord record;
-    bool hit = sphere.hit(ray, 0.0, 100.0, record);
+    bool hit = sphere.hit(record, ray, 0.0, 100.0);
 
     EXPECT_TRUE(hit);
 
@@ -38,7 +38,7 @@ TEST(SphereTest, RayMissesSphere) {
     Ray ray{Vec3{-5, 5, 0}, Vec3{1, 0, 0}};
     
     HitRecord record;
-    bool hit = sphere.hit(ray, 0.0, 100.0, record);
+    bool hit = sphere.hit(record, ray, 0.0, 100.0);
     
     EXPECT_FALSE(hit);
 }
@@ -50,7 +50,7 @@ TEST(SphereTest, RayOriginatesInsideSphere) {
     Ray ray{Vec3{0, 0, 0}, Vec3{1, 0, 0}};
     
     HitRecord record;
-    bool hit = sphere.hit(ray, 0.0, 100.0, record);
+    bool hit = sphere.hit(record, ray, 0.0, 100.0);
     
     EXPECT_TRUE(hit);
     
@@ -65,11 +65,11 @@ TEST(SphereTest, RayHitsWithinTRange) {
     HitRecord record;
     
     // Hit should be at t = 4 (distance from -5 to -1)
-    bool hit = sphere.hit(ray, 3.0, 5.0, record);
+    bool hit = sphere.hit(record, ray, 3.0, 5.0);
     EXPECT_TRUE(hit);
     
     // Hit is outside range
-    hit = sphere.hit(ray, 0.0, 3.0, record);
+    hit = sphere.hit(record, ray, 0.0, 3.0);
     EXPECT_FALSE(hit);
 }
 
@@ -80,7 +80,7 @@ TEST(SphereTest, RayIsTangentToSphere) {
     Ray ray{Vec3{-5, 1, 0}, Vec3{1, 0, 0}};
     
     HitRecord record;
-    bool hit = sphere.hit(ray, 0.0, 100.0, record);
+    bool hit = sphere.hit(record, ray, 0.0, 100.0);
     
     EXPECT_TRUE(hit);
     EXPECT_EQ(record.position, Vec3(0.0, 1.0, 0.0));

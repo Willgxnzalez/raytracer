@@ -21,11 +21,11 @@ Vec3 rayColor(const Ray& ray, const Hittable& scene, int maxDepth) {
 
     for (int depth = 0; depth < maxDepth; ++depth) {
         HitRecord rec;
-        if (scene.hit(currentRay, 0.001, INFINITY, rec)) {
+        if (scene.hit(rec, currentRay, 0.001, INFINITY)) {
             Ray scattered;
             Vec3 materialAttenuation;
             
-            if (rec.material->scatter(currentRay, rec, materialAttenuation, scattered)) {
+            if (rec.material->scatter(rec, currentRay, scattered, materialAttenuation)) {
                 attenuation *= materialAttenuation;
                 currentRay = scattered;
             } else {
