@@ -15,8 +15,8 @@
 
 int main() {
     // Image
-    const int imageWidth = 480;
-    const int imageHeight = 256;
+    const int imageWidth = 640;
+    const int imageHeight = 480;
     const int samplesPerPixel = 50;
     const int maxDepth = 5;
 
@@ -29,21 +29,28 @@ int main() {
     HittableList world;
 
     // Materials
-    Lambertian red(Vec3(0.8, 0.1, 0.1));
     Lambertian green(Vec3(0.1, 0.8, 0.1));
+    Lambertian red(Vec3(0.8, 0.1, 0.1));
     Lambertian blue(Vec3(0.1, 0.1, 0.8));
     Lambertian yellow(Vec3(0.8, 0.8, 0.1));
     Lambertian cyan(Vec3(0.1, 0.8, 0.8));
 
     // Spheres
-    world.add(std::make_shared<Sphere>(Vec3(0, 0, -2), 0.5, &red));
     world.add(std::make_shared<Sphere>(Vec3(0,-100.5,-1), 100, &green)); // ground
+    world.add(std::make_shared<Sphere>(Vec3(0, 0, -2), 0.5, &red));
     world.add(std::make_shared<Sphere>(Vec3(-1, 0, -1), 0.5, &blue));
     world.add(std::make_shared<Sphere>(Vec3(1, 0, -1), 0.5, &yellow));
     world.add(std::make_shared<Sphere>(Vec3(0, 1, -1), 0.5, &cyan));
 
     // Camera
-    Camera camera{imageWidth, imageHeight, 90.0};
+    Camera camera{
+        Vec3{-2, 2, 2},
+        Vec3{0, 0, 0},
+        Vec3{0, 1, 0},
+        imageWidth, 
+        imageHeight, 
+        60.0
+    };
     // Output to file
     std::filesystem::path outputPath = std::filesystem::current_path() / "output.ppm";
     std::ofstream outFile(outputPath);
