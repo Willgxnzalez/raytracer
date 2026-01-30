@@ -6,15 +6,15 @@
  * Camera - Perspective camera with configurable field of view.
  */
 class Camera {
-    Vec3 origin_;                    // Camera position (ray origin)
-    Vec3 lowerLeft_;                 // world-space corner of viewport
-    Vec3 horizontal_;                // viewport width vector
-    Vec3 vertical_;                  // viewport height vector
-    const double focalLength_ = 1.0; // Distance between camera and viewport
+    Vec3 origin_;     // Camera position (ray origin)
+    Vec3 lowerLeft_;  // world-space corner of viewport
+    Vec3 horizontal_; // viewport width vector
+    Vec3 vertical_;   // viewport height vector
+    Vec3 u_, v_, w_;  // Orthonomal basis: Right, Up, Back
 
     int imageWidth_, imageHeight_;
-   
-    Vec3 u_, v_, w_; // Orthonomal basis: Right, Up, Back
+    
+    double aperture_, focusDistance_;
 
 public:
     /**
@@ -26,6 +26,11 @@ public:
      * @param imageWidth Image width in pixels
      * @param imageHeight Image height in pixels
      * @param vFovDegrees Vertical field of view in degrees
+     * @param aperture Lens aperture diameter for depth of field configuration.
+     *                 Larger values (e.g., 2.0) = shallow focus, blurred background.
+     *                 Smaller values (e.g., 0.1) = deep focus, everything sharp.
+     *                 Use 0.0 for pinhole (infinite depth of field).
+     * @param focusDistance Distance to the plane in perfect focus
      */
     Camera(
         const Vec3& lookFrom, 
@@ -33,7 +38,9 @@ public:
         const Vec3& vUp, 
         int imageWidth, 
         int imageHeight, 
-        double vFovDegrees
+        double vFovDegrees,
+        double aperture,
+        double focusDistance
     );
 
     Ray shootRay(int i, int j) const;
