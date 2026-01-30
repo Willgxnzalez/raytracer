@@ -4,42 +4,35 @@
 
 /**
  * Camera - Perspective camera with configurable field of view.
- * 
- * Creates a pinhole camera positioned at origin, oriented to face the -Z direction with the up-axis set to +Y.
- * The viewport is positioned at focal length distance from the camera.
  */
 class Camera {
-    Vec3 origin; // LookFrom point, camera position
-    Vec3 lowerLeftCorner; // world-space corner of viewport
-    Vec3 horizontal; // viewport width vector
-    Vec3 vertical; // viewport height vector
-    double focalLength; // Determines angular spread of rays
+    Vec3 origin_;                    // Camera position (ray origin)
+    Vec3 lowerLeft_;                 // world-space corner of viewport
+    Vec3 horizontal_;                // viewport width vector
+    Vec3 vertical_;                  // viewport height vector
+    const double focalLength_ = 1.0; // Distance between camera and viewport
 
-    int imageWidth;
-    int imageHeight;
-
-    // Orthonormal basis vectors for camera coordinate system
-    Vec3 u; // camera right
-    Vec3 v; // camera up
-    Vec3 w; // camera backward(points from scene toward camera)
+    int imageWidth_, imageHeight_;
+   
+    Vec3 u_, v_, w_; // Orthonomal basis: Right, Up, Back
 
 public:
     /**
-     * Construct a new Camera object
+     * Construct a perspective camera.
      * 
      * @param lookFrom Camera position in world space
      * @param lookAt Point in world space the camera is looking at
-     * @param vUp Up direction vector for the camera (usually (0,1,0))
-     * @param _imageWidth Width of image in pixels
-     * @param _imageHeight Height of image in pixels
+     * @param vUp Up direction vector (usually (0,1,0))
+     * @param imageWidth Image width in pixels
+     * @param imageHeight Image height in pixels
      * @param vFovDegrees Vertical field of view in degrees
      */
     Camera(
         const Vec3& lookFrom, 
         const Vec3& lookAt, 
         const Vec3& vUp, 
-        int _imageWidth, 
-        int _imageHeight, 
+        int imageWidth, 
+        int imageHeight, 
         double vFovDegrees
     );
 

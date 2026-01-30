@@ -19,37 +19,34 @@ Camera::Camera(
     const Vec3& lookFrom, 
     const Vec3& lookAt, 
     const Vec3& vUp, 
-    int _imageWidth, 
-    int _imageHeight, 
+    int imageWidth, 
+    int imageHeight, 
     double vFovDegrees
 )
-    : origin(lookFrom), imageWidth(_imageWidth), imageHeight(_imageHeight), focalLength(1.0)
+    : origin_(lookFrom), imageWidth_(imageWidth), imageHeight_(imageHeight)
 {
-    double aspectRatio = static_cast<double>(imageWidth) / static_cast<double>(imageHeight);
+    // Using Tan(vFov/2) = (viewportHeight/2) / focalLength
+    double aspectRatio = static_cast<double>(imageWidth_) / static_cast<double>(imageHeight_);
     double theta = degreesToRadians(vFovDegrees);
-    double viewportHeight = std::tan(theta / 2) * focalLength * 2.0;
+    double viewportHeight = std::tan(theta / 2) * focalLength_ * 2.0;
     double viewportWidth = viewportHeight * aspectRatio;
 
-    // Compute camera basis vectors
-    w = (lookFrom - lookAt).normalized(); // camera backward
-    u = cross(vUp, w).normalized(); // camera right
-    v = cross(w, u).normalized(); // camera up
+    w_ = (origin_ - lookAt).normalized(); // camera backward
+    u_ = cross(vUp, w_).normalized(); // camera right
+    v_ = cross(w_, u_).normalized(); // camera up
 
-    Vec3 center = origin - focalLength * w; // move viewport plane forward focalLength units along −w vector
-    horizontal = u * viewportWidth;
-    vertical = v * viewportHeight;
-    lowerLeftCorner = center - horizontal / 2 - vertical / 2;
-    std::cout << "Camera center: " << center << std::endl
-              << "horizontal: " << horizontal << std::endl
-              << "vertical: " << vertical << std::endl
-              << "lowerLeftCorner: " << lowerLeftCorner << std::endl;
+    Vec3 viewportCenter = origin_ - focalLength_ * w_; // move viewport plane forward focalLength units along −w vector
+    horizontal_ = u_ * viewportWidth;
+    vertical_ = v_ * viewportHeight;
+    lowerLeft_ = viewportCenter - horizontal_ / 2 - vertical_ / 2;
 }
 
 Ray Camera::shootRay(int i, int j) const {
-    // Map randomly sampled point with pixel(i, j) to normalized 3D coordinate inside viewport rectangle
-    double u = (i + randomOffset()) / (imageWidth-1); // 0 (left edge) <= u <= 1 (right edge)
-    double v = (j + randomOffset()) / (imageHeight-1); // 0 (bottom edge) <= v <= 1 (top edge)
+    // Map randomly sampled point within pixel(i, j) to normalized 3D coordinate inside viewport
+    double u = (i + randomOffset()) / (imageWidth_ - 1); // 0 (left edge) <= u <= 1 (right edge)
+    double v = (j + randomOffset()) / (imageHeight_ - 1); // 0 (bottom edge) <= v <= 1 (top edge)
 
-    Vec3 pointOnViewport = lowerLeftCorner + u*horizontal + v*vertical;
-    return Ray{origin, pointOnViewport - origin}; // ray direction is pointOnViewport - origin = origin -> pointOnViewport
+    Vec3 viewportPoint = lowerLeft_ + u*horizontal_ + v*vertical_;
+    Vec3 rayDirection = viewportPoint - origin_;
+    return Ray{origin_, rayDirection};
 }
