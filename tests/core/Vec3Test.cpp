@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "math/Vec3.h"
+#include "core/Vec3.h"
 
 TEST(Vec3Test, DefaultConstructor) {
     Vec3 v;

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "geometry/Sphere.h"
 #include "core/HitRecord.h"
-#include "math/Ray.h"
+#include "core/Ray.h"
 
 /* 
 Ray hitting Sphere (radius 1, center at 0)

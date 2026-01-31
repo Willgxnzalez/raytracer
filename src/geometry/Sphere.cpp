@@ -1,7 +1,8 @@
 #include "geometry/Sphere.h"
+#include "geometry/AABB.h"
 #include "core/HitRecord.h"
+#include "core/Ray.h"
 #include "materials/Material.h"
-#include "math/Ray.h"
 
 Sphere::Sphere(const Vec3& center, double radius, const Material* material)
     : center(center), radius(radius), material(material) {}
@@ -44,4 +45,8 @@ bool Sphere::hit(
     record.setFaceNormal(ray.direction, outwardNormal);
     record.material = material;
     return true;
+}
+
+AABB Sphere::boundingBox() const {
+    return AABB{center - Vec3{radius, radius, radius}, center + Vec3{radius, radius, radius}};
 }

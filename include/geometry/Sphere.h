@@ -1,6 +1,6 @@
 #pragma once
-#include "Hittable.h"
-#include "../math/Vec3.h"
+#include "core/Hittable.h"
+#include "../core/Vec3.h"
 
 struct Material; // forward declare
 
@@ -20,4 +20,7 @@ struct Sphere : public Hittable {
         double tMin, 
         double tMax
     ) const override;
+
+    AABB boundingBox() const override;
 };
+

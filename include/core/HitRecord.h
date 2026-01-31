@@ -1,5 +1,5 @@
 #pragma once
-#include "../math/Vec3.h"
+#include "Vec3.h"
 #include <cassert>
 
 struct Material; // forward declare

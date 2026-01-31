@@ -1,6 +1,6 @@
 #pragma once
-#include "../math/Ray.h"
-#include "../math/Vec3.h"
+#include "../core/Ray.h"
+#include "../core/Vec3.h"
 
 struct HitRecord; // forward declare
 

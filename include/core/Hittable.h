@@ -1,8 +1,11 @@
 #pragma once
+#include <vector>
+#include <memory>
 
 // forward declare
 struct Ray;
 struct HitRecord;
+struct AABB;
 
 /**
  * Hittable - interface for surfaces that can be hit by rays.
@@ -25,4 +28,8 @@ struct Hittable {
         double tMin, 
         double tMax
     ) const = 0;
+
+    virtual AABB boundingBox() const = 0;
 };
+
+using HittableList = std::vector<std::shared_ptr<Hittable>>;

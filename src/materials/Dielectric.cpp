@@ -1,6 +1,6 @@
 #include "materials/Dielectric.h"
-#include "math/Ray.h"
-#include "math/Vec3.h"
+#include "core/Ray.h"
+#include "core/Vec3.h"
 #include "core/HitRecord.h"
 #include <cmath>
 #include <random>

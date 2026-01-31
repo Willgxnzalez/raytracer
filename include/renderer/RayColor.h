@@ -1,9 +1,9 @@
 #pragma once
 #include <cmath>
-#include "../geometry/Hittable.h"
+#include "../core/Hittable.h"
+#include "../core/Ray.h"
+#include "../core/Vec3.h"
 #include "../materials/Material.h"
-#include "../math/Ray.h"
-#include "../math/Vec3.h"
 #include "../core/HitRecord.h"
 
 /**

@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <type_traits>
-#include "math/Vec3.h"
-#include "math/Ray.h"
+#include "core/Vec3.h"
+#include "core/Ray.h"
+#include "geometry/AABB.h"
 
 template<typename T>
 void analyze_type(const char* name) {
@@ -23,10 +24,12 @@ void analyze_type(const char* name) {
     std::cout << "\n";
 }
 
-// TEST(MemoryAnalysis, PrintTypeInfo) {
-//     analyze_type<Vec3>("Vec3");
-//     analyze_type<Ray>("Ray");
-// }
+TEST(MemoryAnalysis, PrintTypeInfo) {
+    analyze_type<Vec3>("Vec3");
+    analyze_type<Ray>("Ray");
+    analyze_type<Ray>("AABB");
+
+}
 
 TEST(MemoryAnalysis, Vec3Size) {
     EXPECT_LE(sizeof(Vec3), 64);
