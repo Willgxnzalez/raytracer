@@ -3,10 +3,10 @@
 #include <algorithm>
 #include <memory>
 #include <filesystem>
-#include "math/Vec3.h"
-#include "math/Ray.h"
+#include "core/Vec3.h"
+#include "core/Ray.h"
 #include "geometry/Sphere.h"
-#include "geometry/HittableList.h"
+#include "geometry/Scene.h"
 #include "materials/Material.h"
 #include "materials/Lambertian.h"
 #include "materials/Dielectric.h"
@@ -23,7 +23,7 @@ int main() {
     const int barWidth = 40;
 
     // Scene
-    HittableList world;
+    Scene world;
 
     // Materials
     Lambertian green(Vec3(0.1, 0.8, 0.1));
@@ -35,11 +35,23 @@ int main() {
     Dielectric glass(1.5);
 
     // Spheres
-    world.add(std::make_shared<Sphere>(Vec3(0, -100.5, 9), 100, &green)); // ground
-    world.add(std::make_shared<Sphere>(Vec3(0, 0, -1), 0.5, &red));
-    world.add(std::make_shared<Sphere>(Vec3(-1, 0, 0), 0.5, &glass));
-    world.add(std::make_shared<Sphere>(Vec3(1, 0, 0), 0.5, &yellow));
-    world.add(std::make_shared<Sphere>(Vec3(0, 1, 0), 0.5, &glass));
+    // world.add(std::make_shared<Sphere>(Vec3(0, -100.5, 9), 100, &green)); // ground
+    // world.add(std::make_shared<Sphere>(Vec3(0, 0, -1), 0.5, &red));
+    // world.add(std::make_shared<Sphere>(Vec3(-1, 0, 0), 0.5, &glass));
+    // world.add(std::make_shared<Sphere>(Vec3(1, 0, 0), 0.5, &yellow));
+    // world.add(std::make_shared<Sphere>(Vec3(0, 1, 0), 0.5, &glass));
+
+    for (int x = -50; x <= 50; ++x) {
+        for (int z = -50; z <= 50; ++z) {
+            world.add(std::make_shared<Sphere>(
+                Vec3{x * 2.5, 0.2, z * 2.5},
+                0.2,
+                &blue
+            ));
+        }
+    }
+
+    world.build();
 
     // Cyan
     Vec3 cameraPosition{-2, 2, 2};

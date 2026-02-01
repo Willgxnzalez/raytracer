@@ -24,12 +24,12 @@ void analyze_type(const char* name) {
     std::cout << "\n";
 }
 
-TEST(MemoryAnalysis, PrintTypeInfo) {
-    analyze_type<Vec3>("Vec3");
-    analyze_type<Ray>("Ray");
-    analyze_type<Ray>("AABB");
+// TEST(MemoryAnalysis, PrintTypeInfo) {
+//     analyze_type<Vec3>("Vec3");
+//     analyze_type<Ray>("Ray");
+//     analyze_type<Ray>("AABB");
 
-}
+// }
 
 TEST(MemoryAnalysis, Vec3Size) {
     EXPECT_LE(sizeof(Vec3), 64);
