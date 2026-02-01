@@ -18,10 +18,11 @@
 Vec3 rayColor(const Ray& ray, const Hittable& scene, int maxDepth) {
     Ray currentRay = ray;
     Vec3 attenuation(1, 1, 1); // Start with full intensity white light
+    double epsilon = 1e-6;
 
     for (int depth = 0; depth < maxDepth; ++depth) {
         HitRecord rec;
-        if (scene.hit(rec, currentRay, 0.001, INFINITY)) {
+        if (scene.hit(rec, currentRay, epsilon, INFINITY)) {
             Ray scattered;
             Vec3 materialAttenuation;
             
