@@ -3,6 +3,9 @@
 #include "core/HitRecord.h"
 #include "core/Ray.h"
 #include "materials/Material.h"
+#include <atomic>
+
+inline std::atomic<uint64_t> gSphereHits = 0;
 
 Sphere::Sphere(const Vec3& center, double radius, const Material* material)
     : center(center), radius(radius), material(material) {}
@@ -13,6 +16,7 @@ bool Sphere::hit(
     double tMin, 
     double tMax
 ) const {
+    ++gSphereHits;
     // Points on sphere: |P - C|^2 = r^2 -> point P on sphere if its distance from center C is equal to radius
     // Points on ray:     P = O + tD 
     // Substitute: |O + tD - C|^2 = r^2

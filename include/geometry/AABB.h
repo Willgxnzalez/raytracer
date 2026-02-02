@@ -2,6 +2,9 @@
 #include "core/Vec3.h"
 #include "core/Ray.h"
 #include <iostream>
+#include <atomic>
+
+inline std::atomic<uint64_t> gAABBHits = 0;
 
 /**
  * Axis-Aligned Bounding Box
@@ -15,13 +18,14 @@ struct AABB {
     AABB(const Vec3& minCorner, const Vec3& maxCorner) : min(minCorner), max(maxCorner) {}
 
     inline bool hit(const Ray& ray, double tMin, double tMax) const {
+        ++gAABBHits;
         constexpr double EPS = 1e-8;
 
         for (int axis = 0; axis < 3; ++axis) {
             double dir = ray.direction[axis];
             double t0, t1;
 
-            if (std::abs(dir) > EPS) { // Treat nearly parrelel rays as parellel to avoid numerical blowup 
+            if (std::abs(dir) > EPS) { // Treat nearly parallel rays as parellel to avoid numerical blowup 
                 double invDir = 1.0 / dir;
                 t0 = (min[axis] - ray.origin[axis]) * invDir;
                 t1 = (max[axis] - ray.origin[axis]) * invDir;

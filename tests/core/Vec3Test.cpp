@@ -8,6 +8,10 @@ TEST(Vec3Test, DefaultConstructor) {
     EXPECT_EQ(v.z, 0.0);
 }
 
+// ============================================================================
+// Operations
+// ============================================================================
+
 TEST(Vec3Test, OutputStreamOperator) {
     Vec3 v{1.5, 2.75, 3.125};
     
@@ -17,7 +21,7 @@ TEST(Vec3Test, OutputStreamOperator) {
     EXPECT_EQ(oss.str(), "[1.5, 2.75, 3.125]");
 }
 
-TEST(Vec3OpsTest, AdditionOperator) {
+TEST(Vec3Test, AdditionOperator) {
     Vec3 v1{1, 2, 3};
     Vec3 v2{4, 5, 6};
     Vec3 result = v1 + v2;
@@ -25,7 +29,7 @@ TEST(Vec3OpsTest, AdditionOperator) {
     EXPECT_EQ(result, Vec3(5.0, 7.0, 9.0));
 }
 
-TEST(Vec3OpsTest, SubtractionOperator) {
+TEST(Vec3Test, SubtractionOperator) {
     Vec3 v1{5, 7, 9};
     Vec3 v2{1, 2, 3};
     Vec3 result = v1 - v2;
@@ -33,14 +37,14 @@ TEST(Vec3OpsTest, SubtractionOperator) {
     EXPECT_EQ(result, Vec3(4.0, 5.0, 6.0));
 }
 
-TEST(Vec3OpsTest, MultiplicationByScalar) {
+TEST(Vec3Test, MultiplicationByScalar) {
     Vec3 v{2, 3, 4};
     Vec3 result = v * 2.5;
     
     EXPECT_EQ(result, Vec3(5.0, 7.5, 10.0));
 }
 
-TEST(Vec3OpsTest, ScalarMultiplicationCommutative) {
+TEST(Vec3Test, ScalarMultiplicationCommutative) {
     Vec3 v{2, 3, 4};
     Vec3 result1 = v * 3.0;
     Vec3 result2 = 3.0 * v;
@@ -48,14 +52,14 @@ TEST(Vec3OpsTest, ScalarMultiplicationCommutative) {
     EXPECT_EQ(result1, result2);
 }
 
-TEST(Vec3OpsTest, DivisionByScalar) {
+TEST(Vec3Test, DivisionByScalar) {
     Vec3 v{10, 20, 30};
     Vec3 result = v / 5.0;
     
     EXPECT_EQ(result, Vec3(2.0, 4.0, 6.0));
 }
 
-TEST(Vec3OpsTest, AdditionAssignment) {
+TEST(Vec3Test, AdditionAssignment) {
     Vec3 v1{1, 2, 3};
     Vec3 v2{4, 5, 6};
     v1 += v2;
@@ -63,7 +67,7 @@ TEST(Vec3OpsTest, AdditionAssignment) {
     EXPECT_EQ(v1, Vec3(5.0, 7.0, 9.0));
 }
 
-TEST(Vec3OpsTest, SubtractionAssignment) {
+TEST(Vec3Test, SubtractionAssignment) {
     Vec3 v1{10, 15, 20};
     Vec3 v2{2, 3, 4};
     v1 -= v2;
@@ -71,35 +75,35 @@ TEST(Vec3OpsTest, SubtractionAssignment) {
     EXPECT_EQ(v1, Vec3(8.0, 12.0, 16.0));
 }
 
-TEST(Vec3OpsTest, MultiplicationAssignment) {
+TEST(Vec3Test, MultiplicationAssignment) {
     Vec3 v{2, 3, 4};
     v *= 3.0;
     
     EXPECT_EQ(v, Vec3(6.0, 9.0, 12.0));
 }
 
-TEST(Vec3OpsTest, DivisionAssignment) {
+TEST(Vec3Test, DivisionAssignment) {
     Vec3 v{20, 30, 40};
     v /= 2.0;
     
     EXPECT_EQ(v, Vec3(10.0, 15.0, 20.0));
 }
 
-TEST(Vec3OpsTest, NegationOperator) {
+TEST(Vec3Test, NegationOperator) {
     Vec3 v{1, -2, 3};
     Vec3 result = -v;
     
     EXPECT_EQ(result, Vec3(-1.0, 2.0, -3.0));
 }
 
-TEST(Vec3OpsTest, MultiplicationByZero) {
+TEST(Vec3Test, MultiplicationByZero) {
     Vec3 v{5, 10, 15};
     Vec3 result = v * 0.0;
     
     EXPECT_EQ(result, Vec3(0.0, 0.0, 0.0));
 }
 
-TEST(Vec3OpsTest, AdditionIdentity) {
+TEST(Vec3Test, AdditionIdentity) {
     Vec3 v{3, 4, 5};
     Vec3 zero{0, 0, 0};
     Vec3 result = v + zero;
@@ -107,21 +111,21 @@ TEST(Vec3OpsTest, AdditionIdentity) {
     EXPECT_EQ(result, v);
 }
 
-TEST(Vec3OpsTest, MultiplicationByOne) {
+TEST(Vec3Test, MultiplicationByOne) {
     Vec3 v{3, 4, 5};
     Vec3 result = v * 1.0;
     
     EXPECT_EQ(result, v);
 }
 
-TEST(Vec3OpsTest, DivisionByOne) {
+TEST(Vec3Test, DivisionByOne) {
     Vec3 v{3, 4, 5};
     Vec3 result = v / 1.0;
     
     EXPECT_EQ(result, v);
 }
 
-TEST(Vec3OpsTest, ChainedOperations) {
+TEST(Vec3Test, ChainedOperations) {
     Vec3 v{2, 3, 4};
     Vec3 result = (v * 2.0 + Vec3{1, 1, 1}) / 3.0;
     
@@ -130,7 +134,7 @@ TEST(Vec3OpsTest, ChainedOperations) {
     EXPECT_NEAR(result.z, (4.0 * 2.0 + 1.0) / 3.0, 1e-10);
 }
 
-TEST(Vec3OpsTest, AssociativeMultiplication) {
+TEST(Vec3Test, AssociativeMultiplication) {
     Vec3 v{2, 3, 4};
     Vec3 result1 = (v * 2.0) * 3.0;
     Vec3 result2 = v * (2.0 * 3.0);
@@ -138,7 +142,11 @@ TEST(Vec3OpsTest, AssociativeMultiplication) {
     EXPECT_EQ(result1, result2);
 }
 
-TEST(Vec3DotTest, DotProductIdentity) {
+// ============================================================================
+// Dot Product
+// ============================================================================
+
+TEST(Vec3Test, DotProductIdentity) {
     // Test: A·B = |A||B|cos(angle)
     Vec3 v1{1, 2, 3};
     Vec3 v2{4, 5, 6};
@@ -155,7 +163,7 @@ TEST(Vec3DotTest, DotProductIdentity) {
     EXPECT_NEAR(dot_product, expected, 1e-10);
 }
 
-TEST(Vec3DotTest, DotProductWithParallelVectors) {
+TEST(Vec3Test, DotProductWithParallelVectors) {
     Vec3 v1{3, 4, 0};  // length = 5
     Vec3 v2{6, 8, 0};  // length = 10, same direction
     
@@ -165,7 +173,7 @@ TEST(Vec3DotTest, DotProductWithParallelVectors) {
     EXPECT_NEAR(d, expected, 1e-10);
 }
 
-TEST(Vec3DotTest, DotProductWithAntiparallelVectors) {
+TEST(Vec3Test, DotProductWithAntiparallelVectors) {
     Vec3 v1{3, 4, 0};   // length = 5
     Vec3 v2{-3, -4, 0}; // length = 5, opposite direction
     
@@ -175,7 +183,7 @@ TEST(Vec3DotTest, DotProductWithAntiparallelVectors) {
     EXPECT_NEAR(d, expected, 1e-10);
 }
 
-TEST(Vec3DotTest, DotProductWithPerpendicularVectors) {
+TEST(Vec3Test, DotProductWithPerpendicularVectors) {
     Vec3 v1{1, 0, 0};  // X-axis
     Vec3 v2{0, 1, 0};  // Y-axis
     
@@ -184,7 +192,7 @@ TEST(Vec3DotTest, DotProductWithPerpendicularVectors) {
     EXPECT_EQ(d, 0.0);  // cos(90deg) = 0
 }
 
-TEST(Vec3DotTest, DotProductWithUnitVectors) {
+TEST(Vec3Test, DotProductWithUnitVectors) {
     Vec3 v1{3, 4, 0};
     Vec3 v2{1, 0, 0};
     
@@ -196,7 +204,11 @@ TEST(Vec3DotTest, DotProductWithUnitVectors) {
     EXPECT_NEAR(cos_angle, 0.6, 1e-10);
 }
 
-TEST(Vec3CrossTest, CrossProductWithPerpendicularVectors) {
+// ============================================================================
+// Cross Product
+// ============================================================================
+
+TEST(Vec3Test, CrossProductWithPerpendicularVectors) {
     // Test: A X B = |A||B|sin(angle)
     Vec3 v1{1, 0, 0};
     Vec3 v2{0, 1, 0};
@@ -207,7 +219,7 @@ TEST(Vec3CrossTest, CrossProductWithPerpendicularVectors) {
     EXPECT_EQ(dot(cross_product, v2), 0);
 }
 
-TEST(Vec3CrossTest, CrossProductRightHandRule) {
+TEST(Vec3Test, CrossProductRightHandRule) {
     Vec3 x_axis{1, 0, 0};
     Vec3 y_axis{0, 1, 0};
     Vec3 z_axis{0, 0, 1};
@@ -222,7 +234,7 @@ TEST(Vec3CrossTest, CrossProductRightHandRule) {
     EXPECT_EQ(cross(z_axis, x_axis), y_axis);
 }
 
-TEST(Vec3CrossTest, CrossProductAnticommutative) {
+TEST(Vec3Test, CrossProductAnticommutative) {
     Vec3 v1{1, 2, 3};
     Vec3 v2{4, 5, 6};
     
@@ -235,7 +247,7 @@ TEST(Vec3CrossTest, CrossProductAnticommutative) {
     EXPECT_NEAR(cross1.z, -cross2.z, 1e-10);
 }
 
-TEST(Vec3CrossTest, CrossProductWithParallelVectors) {
+TEST(Vec3Test, CrossProductWithParallelVectors) {
     Vec3 v1{2, 4, 6};
     Vec3 v2{1, 2, 3};
     Vec3 zero{0, 0, 0};
@@ -244,7 +256,7 @@ TEST(Vec3CrossTest, CrossProductWithParallelVectors) {
     EXPECT_EQ(cross(v1, v2), zero);
 }
 
-TEST(Vec3CrossTest, CrossProductWithSelf) {
+TEST(Vec3Test, CrossProductWithSelf) {
     Vec3 v{3, 4, 5};
     Vec3 zero{0, 0, 0};
 
@@ -252,7 +264,7 @@ TEST(Vec3CrossTest, CrossProductWithSelf) {
     EXPECT_EQ(cross(v, v), zero);
 }
 
-TEST(Vec3CrossTest, CrossProductMagnitude) {
+TEST(Vec3Test, CrossProductMagnitude) {
     Vec3 v1{3, 0, 0};  // length = 3
     Vec3 v2{0, 4, 0};  // length = 4, perpendicular to v1
     
@@ -265,7 +277,7 @@ TEST(Vec3CrossTest, CrossProductMagnitude) {
     EXPECT_NEAR(result.length(), expected_magnitude, 1e-10);
 }
 
-TEST(Vec3CrossTest, CrossProductCalculation) {
+TEST(Vec3Test, CrossProductCalculation) {
     Vec3 v1{1, 2, 3};
     Vec3 v2{4, 5, 6};
     
@@ -281,7 +293,7 @@ TEST(Vec3CrossTest, CrossProductCalculation) {
     EXPECT_NEAR(result.z, -3.0, 1e-10);
 }
 
-TEST(Vec3CrossTest, CrossProductTriangleNormal) {
+TEST(Vec3Test, CrossProductTriangleNormal) {
     Vec3 v0{0, 0, 0};
     Vec3 v1{1, 0, 0};
     Vec3 v2{0, 1, 0};
@@ -294,7 +306,7 @@ TEST(Vec3CrossTest, CrossProductTriangleNormal) {
     EXPECT_EQ(cross(edge1, edge2), v3);
 }
     
-TEST(Vec3CrossTest, CrossProductScalarTripleProduct) {
+TEST(Vec3Test, CrossProductScalarTripleProduct) {
     Vec3 v1{1, 0, 0};
     Vec3 v2{0, 1, 0};
     Vec3 v3{0, 0, 1};
@@ -306,7 +318,7 @@ TEST(Vec3CrossTest, CrossProductScalarTripleProduct) {
     EXPECT_NEAR(volume, 1.0, 1e-10);  // Unit cube
 }
 
-TEST(Vec3CrossTest, CrossProductDistributive) {
+TEST(Vec3Test, CrossProductDistributive) {
     Vec3 a{1, 2, 3};
     Vec3 b{4, 5, 6};
     Vec3 c{7, 8, 9};

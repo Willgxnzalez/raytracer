@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <memory>
 #include <filesystem>
+#include <atomic>
 #include "core/Vec3.h"
 #include "core/Ray.h"
 #include "geometry/Sphere.h"
@@ -13,6 +14,9 @@
 #include "renderer/RayColor.h"
 #include "renderer/Camera.h"
 #include "util/ProgressBar.h"
+
+extern std::atomic<uint64_t> gSphereHits;
+extern std::atomic<uint64_t> gAABBHits;
 
 int main() {
     // Image
@@ -35,27 +39,27 @@ int main() {
     Dielectric glass(1.5);
 
     // Spheres
-    // world.add(std::make_shared<Sphere>(Vec3(0, -100.5, 9), 100, &green)); // ground
-    // world.add(std::make_shared<Sphere>(Vec3(0, 0, -1), 0.5, &red));
-    // world.add(std::make_shared<Sphere>(Vec3(-1, 0, 0), 0.5, &glass));
-    // world.add(std::make_shared<Sphere>(Vec3(1, 0, 0), 0.5, &yellow));
-    // world.add(std::make_shared<Sphere>(Vec3(0, 1, 0), 0.5, &glass));
+    world.add(std::make_shared<Sphere>(Vec3(0, -100.5, 9), 100, &green)); // ground
+    world.add(std::make_shared<Sphere>(Vec3(0, 0, -1), 0.5, &red));
+    world.add(std::make_shared<Sphere>(Vec3(-1, 0, 0), 0.5, &glass));
+    world.add(std::make_shared<Sphere>(Vec3(1, 0, 0), 0.5, &yellow));
+    world.add(std::make_shared<Sphere>(Vec3(0, 1, 0), 0.5, &glass));
 
-    for (int x = -50; x <= 50; ++x) {
-        for (int z = -50; z <= 50; ++z) {
-            world.add(std::make_shared<Sphere>(
-                Vec3{x * 2.5, 0.2, z * 2.5},
-                0.2,
-                &blue
-            ));
-        }
-    }
+    // for (int x = -50; x <= 50; ++x) {
+    //     for (int z = -50; z <= 50; ++z) {
+    //         world.add(std::make_shared<Sphere>(
+    //             Vec3{x * 2.5, 0.2, z * 2.5},
+    //             0.2,
+    //             &blue
+    //         ));
+    //     }
+    // }
 
     world.build();
 
     // Cyan
     Vec3 cameraPosition{-2, 2, 2};
-    Vec3 focusTarget{0, 0, 0};
+    Vec3 focusTarget{0, 1, 0};
     double focusDistance = (focusTarget - cameraPosition).length();
 
     // Camera
@@ -66,7 +70,7 @@ int main() {
         imageWidth, 
         imageHeight, 
         75.0,
-        0,
+        0.3,
         focusDistance // For testing, this is distance from the camera to the target object
     };
     // Output to file
@@ -104,6 +108,8 @@ int main() {
                     << static_cast<int>(256 * std::clamp(b,0.0,0.999)) << '\n';
         }
     }
+    std::cout << "AABB tests:   " << gAABBHits   << "\n";
+    std::cout << "Sphere tests: " << gSphereHits << "\n";
     outFile.close();
     return EXIT_SUCCESS;
 }
