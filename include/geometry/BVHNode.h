@@ -5,15 +5,16 @@
 /**
  * Bounding Volume Hierarchy Node
  * Each node either:
- * - contains two child nodes, or
+ * - contains two child nodes
  * - contains a single leaf node
  */
 struct BVHNode : public Hittable {
-    std::shared_ptr<Hittable> left;
-    std::shared_ptr<Hittable> right;
+    std::unique_ptr<BVHNode> left;
+    std::unique_ptr<BVHNode> right;
+    std::shared_ptr<Hittable> leaf;
     AABB box;
 
-    BVHNode(HittableList& objects, size_t start, size_t end);
+    BVHNode() = default;
 
     bool hit(
         HitRecord& record,
@@ -23,4 +24,6 @@ struct BVHNode : public Hittable {
     ) const override;
 
     AABB boundingBox() const override;
+
+    bool isLeaf() const;
 };
