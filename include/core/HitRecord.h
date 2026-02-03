@@ -11,7 +11,7 @@ struct Material; // forward declare
  */
 struct HitRecord {
     Vec3 position;
-    Vec3 surfaceNormal;
+    Vec3 normal; // outward surface normal
     double t;
     bool frontFace;
     const Material* material;
@@ -20,7 +20,7 @@ struct HitRecord {
         assert(std::abs(outwardNormal.lengthSquared() - 1.0) < 1e-6);
 
         frontFace = dot(rayDirection, outwardNormal) < 0;
-        surfaceNormal = frontFace ? outwardNormal : -outwardNormal;
+        normal = frontFace ? outwardNormal : -outwardNormal;
     }
 };
 

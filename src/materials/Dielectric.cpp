@@ -28,10 +28,10 @@ bool Dielectric::scatter(
     double etaRatio = record.frontFace ? (1.0 / eta) : eta;
 
     // Cosine of angle between ray and surface normal
-    double cosTheta = std::min(dot(-unitDir, record.surfaceNormal), 1.0);
+    double cosTheta = std::min(dot(-unitDir, record.normal), 1.0);
 
     // Compute perpendicular component of refracted ray
-    Vec3 r_perp = etaRatio * (unitDir + cosTheta * record.surfaceNormal);
+    Vec3 r_perp = etaRatio * (unitDir + cosTheta * record.normal);
 
     // Check for total internal reflection
     bool cannotRefract = r_perp.lengthSquared() > 1.0;
@@ -43,11 +43,11 @@ bool Dielectric::scatter(
 
     if (cannotRefract || dis(gen) < R) {
         // Reflect
-        Vec3 reflected = unitDir - 2.0 * dot(unitDir, record.surfaceNormal) * record.surfaceNormal;
+        Vec3 reflected = unitDir - 2.0 * dot(unitDir, record.normal) * record.normal;
         rayOut = Ray(record.position, reflected.normalized());
     } else {
         // Refract
-        Vec3 r_parallel = -std::sqrt(1.0 - r_perp.lengthSquared()) * record.surfaceNormal;
+        Vec3 r_parallel = -std::sqrt(1.0 - r_perp.lengthSquared()) * record.normal;
         Vec3 refracted = r_perp + r_parallel;
         rayOut = Ray(record.position, refracted.normalized());
     }

@@ -2,7 +2,6 @@
 #include "geometry/AABB.h"
 #include "core/HitRecord.h"
 #include "core/Ray.h"
-#include <random>
 #include <algorithm>
 #include <iostream>
 

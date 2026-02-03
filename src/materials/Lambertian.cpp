@@ -20,10 +20,10 @@ bool Lambertian::scatter(
     Ray& rayOut,
     Vec3& attenuation 
 ) const {
-    Vec3 scatteredDirection = record.surfaceNormal + randomInUnitSphere();
+    Vec3 scatteredDirection = record.normal + randomInUnitSphere();
 
     if (scatteredDirection.nearZero()) {
-        scatteredDirection = record.surfaceNormal;
+        scatteredDirection = record.normal;
     }
 
     rayOut = Ray{record.position, scatteredDirection};

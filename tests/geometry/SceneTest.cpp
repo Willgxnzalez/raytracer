@@ -22,7 +22,7 @@ TEST(SceneTest, HitsSingleObject) {
     EXPECT_TRUE(hit);
     EXPECT_NEAR(record.t, 4.0, 1e-6);
     EXPECT_EQ(record.position, Vec3(-1, 0, 0));
-    EXPECT_EQ(record.surfaceNormal, Vec3(-1, 0, 0));
+    EXPECT_EQ(record.normal, Vec3(-1, 0, 0));
 }
 
 TEST(SceneTest, ReturnsNearestHit) {

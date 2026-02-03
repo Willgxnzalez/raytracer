@@ -27,7 +27,7 @@ TEST(SphereTest, RayHitsSphereAtCenter) {
     EXPECT_EQ(record.position, Vec3(-1, 0, 0));
     
     // Normal should point outward (to the left)
-    EXPECT_EQ(record.surfaceNormal, Vec3(-1, 0, 0));
+    EXPECT_EQ(record.normal, Vec3(-1, 0, 0));
     EXPECT_TRUE(record.frontFace);
 }
 
