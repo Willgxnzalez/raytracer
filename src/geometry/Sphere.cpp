@@ -37,9 +37,9 @@ bool Sphere::hit(
     double tPlus = (-halfB + std::sqrt(discriminant)) / a;
 
     double t;
-    if (tMin <= tMinus && tMinus <= tMax ) 
+    if (tMin < tMinus && tMinus < tMax ) 
         t = tMinus;
-    else if (tMin <= tPlus && tPlus <= tMax ) 
+    else if (tMin < tPlus && tPlus < tMax ) 
         t = tPlus;
     else return false;
 

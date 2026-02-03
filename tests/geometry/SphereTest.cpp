@@ -86,3 +86,11 @@ TEST(SphereTest, RayIsTangentToSphere) {
     EXPECT_EQ(record.position, Vec3(0.0, 1.0, 0.0));
 }
 
+TEST(SphereTest, RejectsSelfIntersection) {
+    Sphere sphere(Vec3(0,0,0), 1.0, nullptr);
+
+    Ray ray(Vec3(1,0,0), Vec3(1,0,0)); // starts exactly on surface
+    HitRecord record;
+
+    EXPECT_FALSE(sphere.hit(record, ray, 0.001, 100.0));
+}
