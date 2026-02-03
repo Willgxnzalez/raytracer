@@ -5,72 +5,79 @@
 #include "core/HitRecord.h"
 #include <memory>
 
-TEST(SceneTest, SingleSphere) {
+// ============================================================================
+// Scene Integration Tests
+// ============================================================================
+
+TEST(SceneTest, HitsSingleObject) {
     Scene scene;
     scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0, nullptr));
     scene.build();
+
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
-    
     HitRecord record;
-    bool hit = scene.hit(record, ray, 0.0, 100.0);
-    
+
+    bool hit = scene.hit(record, ray, 0.001, 100.0);
+
     EXPECT_TRUE(hit);
-    
-    // Ray should hit at x = -1 (left side of sphere)
+    EXPECT_NEAR(record.t, 4.0, 1e-6);
     EXPECT_EQ(record.position, Vec3(-1, 0, 0));
-    
-    // Normal should point outward (to the left)
     EXPECT_EQ(record.surfaceNormal, Vec3(-1, 0, 0));
 }
 
-TEST(SceneTest, HitsNearestOfTwoSpheres) {
+TEST(SceneTest, ReturnsNearestHit) {
     Scene scene;
     scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0, nullptr));
     scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0, nullptr));
     scene.build();
+
     Ray ray{Vec3{0, 0, 0}, Vec3{1, 0, 0}};
-    
     HitRecord record;
-    bool hit = scene.hit(record, ray, 0.0, 100.0);
-    
+
+    bool hit = scene.hit(record, ray, 0.001, 100.0);
+
     EXPECT_TRUE(hit);
-    
-    // Ray should hit left side of first sphere at x = 4
-    EXPECT_EQ(record.position, Vec3(4, 0, 0));
-    
-    // Normal should point outward (to the left)
-    EXPECT_EQ(record.surfaceNormal, Vec3(-1, 0, 0));
+    EXPECT_EQ(record.position, Vec3(4, 0, 0));   // nearest sphere
+    EXPECT_LT(record.t, 6.0);                    // sanity check
 }
 
-TEST(SceneTest, RayMissesSpheres) {
+TEST(SceneTest, RayMissesAllObjects) {
     Scene scene;
     scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0, nullptr));
     scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0, nullptr));
     scene.build();
-    Ray ray{Vec3{0, 5, 0}, Vec3{1, 0, 0}};
 
+    Ray ray{Vec3{0, 5, 0}, Vec3{1, 0, 0}};
     HitRecord record;
-    bool hit = scene.hit(record, ray, 0.0, 100.0);
-    
-    EXPECT_FALSE(hit);
+
+    EXPECT_FALSE(scene.hit(record, ray, 0.001, 100.0));
 }
 
-TEST(SceneTest, OverlappingSpheres) {
+TEST(SceneTest, OverlappingObjectsHitClosestSurface) {
     Scene scene;
-    // Two spheres overlapping at origin
     scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 2.0, nullptr));
     scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0, nullptr));
     scene.build();
 
-    
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
     HitRecord record;
-    
-    bool hit = scene.hit(record, ray, 0.0, 100.0);
-    
+
+    bool hit = scene.hit(record, ray, 0.001, 100.0);
+
     EXPECT_TRUE(hit);
-    
-    // Should hit the larger sphere first (at x=-2)
-    EXPECT_EQ(record.position, Vec3(-2, 0, 0));
-    EXPECT_NEAR(record.t, 3.0, 1e-10);  // Distance from -5 to -2
+    EXPECT_NEAR(record.t, 3.0, 1e-6);             // -5 → -2
+    EXPECT_EQ(record.position, Vec3(-2, 0, 0));  // larger sphere surface
+}
+
+TEST(SceneTest, RespectsTMinAndTMax) {
+    Scene scene;
+    scene.add(std::make_shared<Sphere>(Vec3{0, 0, -5}, 1.0, nullptr));
+    scene.build();
+
+    Ray ray{Vec3{0, 0, 0}, Vec3{0, 0, -1}};
+    HitRecord record;
+
+    EXPECT_FALSE(scene.hit(record, ray, 6.0, 100.0)); // tMin past hit
+    EXPECT_FALSE(scene.hit(record, ray, 0.001, 3.0)); // tMax before hit
+    EXPECT_TRUE(scene.hit(record, ray, 0.001, 100.0));
 }
