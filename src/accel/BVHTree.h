@@ -1,11 +1,14 @@
 #pragma once
-#include "core/Hittable.h"
+#include "geometry/Hittable.h"
 #include "BVHNode.h"
 #include <memory>
 #include <vector>
 
 class BVHTree {    
 public:
+
+    BVHTree() = default;
+
     void build(const HittableList & objects);
 
     bool hit(

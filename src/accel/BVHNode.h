@@ -1,6 +1,6 @@
 #pragma once
-#include "core/Hittable.h"
-#include "AABB.h"
+#include "geometry/Hittable.h"
+#include "accel/AABB.h"
 
 /**
  * Bounding Volume Hierarchy Node

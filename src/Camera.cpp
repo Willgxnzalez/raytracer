@@ -1,5 +1,4 @@
-#include "renderer/Camera.h"
-#include "core/Ray.h"
+#include "Camera.h"
 #include <random>
 #include <numbers>
 #include <cmath>

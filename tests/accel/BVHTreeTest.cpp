@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "geometry/BVHTree.h"
-#include "geometry/BVHNode.h"
-#include "geometry/AABB.h"
+#include "accel/BVHTree.h"
+#include "accel/BVHNode.h"
+#include "accel/AABB.h"
 #include "geometry/Sphere.h"
 #include "core/Ray.h"
 #include "core/HitRecord.h"

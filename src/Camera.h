@@ -1,6 +1,6 @@
 #pragma once
-#include "../core/Vec3.h"
-#include "../core/Ray.h"
+#include "core/Vec3.h"
+#include "core/Ray.h"
 
 /**
  * Camera - Perspective camera with configurable field of view.

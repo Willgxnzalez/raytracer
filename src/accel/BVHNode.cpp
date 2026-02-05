@@ -1,5 +1,4 @@
-#include "geometry/BVHNode.h"
-#include "geometry/AABB.h"
+#include "accel/BVHNode.h"
 #include "core/HitRecord.h"
 #include "core/Ray.h"
 #include <algorithm>

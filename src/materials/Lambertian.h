@@ -1,6 +1,6 @@
 #pragma once
-#include "Material.h"
-#include "../core/Vec3.h"
+#include "materials/Material.h"
+#include "core/Vec3.h"
 
 /**
  * Material that diffuses light creating a matte texture

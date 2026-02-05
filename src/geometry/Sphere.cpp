@@ -1,5 +1,5 @@
 #include "geometry/Sphere.h"
-#include "geometry/AABB.h"
+#include "accel/AABB.h"
 #include "core/HitRecord.h"
 #include "core/Ray.h"
 #include "materials/Material.h"

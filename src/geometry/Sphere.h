@@ -1,6 +1,6 @@
 #pragma once
-#include "core/Hittable.h"
-#include "../core/Vec3.h"
+#include "geometry/Hittable.h"
+#include "core/Vec3.h"
 
 struct Material; // forward declare
 

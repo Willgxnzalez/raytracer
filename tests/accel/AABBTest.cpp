@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "geometry/AABB.h"
+#include "accel/AABB.h"
 #include "core/Vec3.h"
 #include "core/Ray.h"
 

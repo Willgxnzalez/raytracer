@@ -3,7 +3,7 @@
 #include <type_traits>
 #include "core/Vec3.h"
 #include "core/Ray.h"
-#include "geometry/AABB.h"
+#include "accel/AABB.h"
 
 template<typename T>
 void analyze_type(const char* name) {

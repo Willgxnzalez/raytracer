@@ -1,10 +1,10 @@
 #pragma once
+#include "geometry/Hittable.h"
+#include "core/Ray.h"
+#include "core/Vec3.h"
+#include "materials/Material.h"
+#include "core/HitRecord.h"
 #include <cmath>
-#include "../core/Hittable.h"
-#include "../core/Ray.h"
-#include "../core/Vec3.h"
-#include "../materials/Material.h"
-#include "../core/HitRecord.h"
 
 /**
  * Compute the color of a ray by iteratively tracing it through the scene, accumulating color from surface interactions
@@ -15,7 +15,7 @@
  * @param maxDepth Maximum number of bounces allowed
  * @return Final color accumulated along the ray path
  */
-Vec3 rayColor(const Ray& ray, const Hittable& scene, int maxDepth) {
+Vec3 traceRay(const Ray& ray, const Hittable& scene, int maxDepth) {
     Ray currentRay = ray;
     Vec3 attenuation(1, 1, 1); // Start with full intensity white light
     double epsilon = 1e-6;

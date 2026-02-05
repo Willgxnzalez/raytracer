@@ -11,8 +11,8 @@
 #include "materials/Material.h"
 #include "materials/Lambertian.h"
 #include "materials/Dielectric.h"
-#include "renderer/RayColor.h"
-#include "renderer/Camera.h"
+#include "RayColor.h"
+#include "Camera.h"
 #include "util/ProgressBar.h"
 
 extern std::atomic<uint64_t> gSphereHits;
@@ -30,7 +30,7 @@ int main() {
     Scene world;
 
     // Materials
-    Lambertian green(Vec3(0.1, 0.8, 0.1));
+    Lambertian grey(Vec3(0.3, 0.3, 0.3));
     Lambertian red(Vec3(0.8, 0.1, 0.1));
     Lambertian blue(Vec3(0.1, 0.1, 0.8));
     Lambertian yellow(Vec3(0.8, 0.8, 0.1));
@@ -39,7 +39,7 @@ int main() {
     Dielectric glass(1.5);
 
     // Spheres
-    world.add(std::make_shared<Sphere>(Vec3(0, -100.5, 9), 100, &green)); // ground
+    world.add(std::make_shared<Sphere>(Vec3(0, -100.5, 9), 100, &grey)); // ground
     world.add(std::make_shared<Sphere>(Vec3(0, 0, -1), 0.5, &red));
     world.add(std::make_shared<Sphere>(Vec3(-1, 0, 0), 0.5, &glass));
     world.add(std::make_shared<Sphere>(Vec3(1, 0, 0), 0.5, &yellow));

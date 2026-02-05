@@ -1,6 +1,6 @@
 #pragma once
-#include "core/Hittable.h"
-#include "BVHTree.h"
+#include "geometry/Hittable.h"
+#include "accel/BVHTree.h"
 
 /**
  * Scene - Owns scene geometry and BVH acceleration structure

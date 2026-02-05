@@ -1,5 +1,5 @@
-#include "geometry/BVHTree.h"
-#include "core/Hittable.h"
+#include "accel/BVHTree.h"
+#include "geometry/Hittable.h"
 #include <memory>
 #include <random>
 #include <algorithm>

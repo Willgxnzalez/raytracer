@@ -1,5 +1,5 @@
 #pragma once
-#include "Material.h"
+#include "materials/Material.h"
 
 /**
  * Transparent material that refracts and refrects light
