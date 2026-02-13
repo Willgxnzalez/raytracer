@@ -3,12 +3,15 @@
 #include "core/Ray.h"
 #include <random>
 
-Vec3 randomInUnitSphere() {
-    static std::mt19937 gen(std::random_device{}());
-    static std::uniform_real_distribution<float> dis(-1.0, 1.0);
+Vec3 randomInUnitSphere(RNG& rng) {
     while(true) {
-        Vec3 v{dis(gen), dis(gen), dis(gen)};
-        if (v.lengthSquared() < 1) return v;
+        // Unit cube point
+        Vec3 v{
+            rng.uniform(-1.0f, 1.0f), 
+            rng.uniform(-1.0f, 1.0f), 
+            rng.uniform(-1.0f, 1.0f)
+        };
+        if (v.lengthSquared() < 1.0f) return v; // check if cube point inside unit sphere
     }
 }
 
@@ -18,9 +21,10 @@ bool Lambertian::scatter(
     const HitRecord& record, 
     const Ray& rayIn, 
     Ray& rayOut,
-    Color& attenuation 
+    Color& attenuation,
+    RNG& rng 
 ) const {
-    Vec3 scatteredDirection = record.normal + randomInUnitSphere();
+    Vec3 scatteredDirection = record.normal + randomInUnitSphere(rng);
 
     if (scatteredDirection.nearZero()) {
         scatteredDirection = record.normal;

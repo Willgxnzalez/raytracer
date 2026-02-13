@@ -8,18 +8,9 @@ float degreesToRadians(float degrees) {
     return degrees * (std::numbers::pi / 180);
 }
 
-float randomOffset() {
-    static std::mt19937 gen(std::random_device{}());
-    static std::uniform_real_distribution<float> dis(0.0f, 1.0f);
-    return dis(gen);
-}
-
-Point3 randomPointOnUnitDisk() {
-    static std::mt19937 gen(std::random_device{}());
-    static std::uniform_real_distribution<float> angleDis(0.0f, 2.0f * std::numbers::pi);
-    static std::uniform_real_distribution<float> radiusDis(0.0f, 1.0f); 
-    float angle = angleDis(gen);
-    float radius = std::sqrt(radiusDis(gen));
+Point3 randomPointOnUnitDisk(RNG& rng) { // in x-y plane
+    float angle = rng.uniform(0.0f, 2.0f * std::numbers::pi);
+    float radius = rng.uniform01();
     return Point3{std::cos(angle) * radius, std::sin(angle) * radius, 0.0f};
 }
 
@@ -55,15 +46,15 @@ Camera::Camera(
     lowerLeft_ = viewportCenter - horizontal_ / 2 - vertical_ / 2;
 }
 
-Ray Camera::shootRay(int i, int j) const {
-    // Map randomly sampled point within pixel(i, j) to normalized 3D coordinate inside viewport
-    float px = (i + randomOffset()) / (imageWidth_ - 1); // 0 (left) to 1 (right)
-    float py = (imageHeight_ - 1 - j + randomOffset()) / (imageHeight_ - 1); // 1 (top edge) to 0 (bottom edge)
+Ray Camera::shootRay(int x, int y, RNG& rng) const {
+    // Map randomly sampled point within pixel(x, y) to normalized 3D coordinate inside viewport
+    float sx = (x + rng.uniform01()) / (imageWidth_ - 1); // 0 (left) to 1 (right)
+    float sy = (imageHeight_ - 1 - y + rng.uniform01()) / (imageHeight_ - 1); // 1 (top) to 0 (bottom) 
 
-    Point3 viewportPoint = lowerLeft_ + px * horizontal_ + py * vertical_;
+    Point3 viewportPoint = lowerLeft_ + sx * horizontal_ + sy * vertical_;
     Vec3 direction = viewportPoint - origin_;
     Point3 focusPoint = origin_ + focusDistance_ * direction.normalized(); // Point on focus plane
-    Vec3 lensOffset = randomPointOnUnitDisk() * (aperture_ / 2);
+    Vec3 lensOffset = randomPointOnUnitDisk(rng) * (aperture_ / 2);
     Vec3 offset = u_ * lensOffset.x + v_ * lensOffset.y;
     Point3 rayOrigin = origin_ + offset;
     Vec3 rayDirection = focusPoint - rayOrigin;

@@ -1,6 +1,7 @@
 #pragma once
 #include "core/Vec3.h"
 #include "core/Ray.h"
+#include "util/RNG.h"
 
 /**
  * Camera - Perspective camera with configurable field of view.
@@ -43,5 +44,5 @@ public:
         float focusDistance
     );
 
-    Ray shootRay(int i, int j) const;
+    Ray shootRay(int x, int y, RNG& rng) const;
 };

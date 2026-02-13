@@ -3,7 +3,6 @@
 #include "core/Vec3.h"
 #include "core/HitRecord.h"
 #include <cmath>
-#include <random>
 
 Dielectric::Dielectric(float eta) : eta(eta) {}
 
@@ -11,10 +10,9 @@ bool Dielectric::scatter(
     const HitRecord& record,
     const Ray& rayIn,
     Ray& rayOut,
-    Color& attenuation
+    Color& attenuation,
+    RNG& rng
 ) const {
-    static std::mt19937 gen(std::random_device{}());
-    static std::uniform_real_distribution<float> dis(0.0f, 1.0f);
 
     // Dielectrics do not absorb light
     attenuation = Color(1.0f, 1.0f, 1.0f);
@@ -41,7 +39,7 @@ bool Dielectric::scatter(
     R0 = R0 * R0;
     float R = R0 + (1.0f - R0) * std::pow(1.0f - cosTheta, 5.0f);
 
-    if (cannotRefract || dis(gen) < R) {
+    if (cannotRefract || rng.uniform01() < R) {
         // Reflect
         Vec3 reflected = unitDir - 2.0f * dot(unitDir, record.normal) * record.normal;
         rayOut = Ray(record.position, reflected.normalized());

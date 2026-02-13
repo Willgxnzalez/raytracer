@@ -1,6 +1,7 @@
 #pragma once
 #include "core/Ray.h"
 #include "core/Vec3.h"
+#include "util/RNG.h"
 
 struct HitRecord; // forward declare
 
@@ -23,6 +24,7 @@ struct Material {
         const HitRecord& record, 
         const Ray& rayIn, 
         Ray& rayOut,
-        Color& attenuation 
+        Color& attenuation,
+        RNG& rng 
     ) const = 0;
 };

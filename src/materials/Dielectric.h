@@ -13,6 +13,7 @@ struct Dielectric : public Material {
         const HitRecord& record, 
         const Ray& rayIn, 
         Ray& rayOut,
-        Color& attenuation 
+        Color& attenuation,
+        RNG& rng
     ) const override;
 };

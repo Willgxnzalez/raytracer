@@ -1,9 +1,11 @@
 #pragma once
+
 #include "geometry/Hittable.h"
 #include "core/Ray.h"
 #include "core/Vec3.h"
-#include "materials/Material.h"
 #include "core/HitRecord.h"
+#include "materials/Material.h"
+#include "util/RNG.h"
 #include <cmath>
 
 /**
@@ -12,10 +14,11 @@
  * 
  * @param ray Initial ray to trace
  * @param scene World containing all hittable objects
+ * @param RNG Random number generator
  * @param maxDepth Maximum number of bounces allowed
  * @return Final color accumulated along the ray path
  */
-Color traceRay(const Ray& ray, const Hittable& scene, int maxDepth) {
+Color traceRay(const Ray& ray, const Hittable& scene, RNG& rng, int maxDepth) {
     Ray currentRay = ray;
     Color attenuation(1.0f, 1.0f, 1.0f); // Start with full intensity white light
     float EPS = 1e-4f; // prevent self intersections
@@ -26,7 +29,7 @@ Color traceRay(const Ray& ray, const Hittable& scene, int maxDepth) {
             Ray scattered;
             Color materialAttenuation;
             
-            if (rec.material->scatter(rec, currentRay, scattered, materialAttenuation)) {
+            if (rec.material->scatter(rec, currentRay, scattered, materialAttenuation, rng)) {
                 attenuation *= materialAttenuation;
                 currentRay = scattered;
             } else {
