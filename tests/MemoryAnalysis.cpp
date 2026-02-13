@@ -27,16 +27,20 @@ void analyze_type(const char* name) {
 // TEST(MemoryAnalysis, PrintTypeInfo) {
 //     analyze_type<Vec3>("Vec3");
 //     analyze_type<Ray>("Ray");
-//     analyze_type<Ray>("AABB");
-
+//     analyze_type<AABB>("AABB");
 // }
 
 TEST(MemoryAnalysis, Vec3Size) {
-    EXPECT_LE(sizeof(Vec3), 64);
+    EXPECT_EQ(sizeof(Vec3), 12);
     EXPECT_TRUE(std::is_trivially_copyable<Vec3>::value);
 }
 
 TEST(MemoryAnalysis, RaySize) {
-    EXPECT_LE(sizeof(Ray), 64);
+    EXPECT_EQ(sizeof(Ray), 24);
+    EXPECT_TRUE(std::is_trivially_copyable<Ray>::value);
+}
+
+TEST(MemoryAnalysis, AABBSize) {
+    EXPECT_EQ(sizeof(Ray), 24);
     EXPECT_TRUE(std::is_trivially_copyable<Ray>::value);
 }
