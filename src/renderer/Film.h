@@ -5,8 +5,11 @@
 
 class Film {
     std::vector<Color> pixels;
-    Film(int imageWidth, int imageHeight);
+    int width_, height_;
 
-    void colorPixel(int x, int y, Vec3 color);
+public:
+    Film(int width, int height) {}
+
+    void colorPixel(int x, int y, const Color&  color);
     void output(const char* path);
 };
