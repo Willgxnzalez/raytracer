@@ -4,7 +4,7 @@
 constexpr float TEST_EPS = 1e-5f;
 
 TEST(Vec3Test, DefaultConstructor) {
-    Vec3 v;
+    Vec3 v{};
     EXPECT_EQ(v.x, 0.0);
     EXPECT_EQ(v.y, 0.0);
     EXPECT_EQ(v.z, 0.0);

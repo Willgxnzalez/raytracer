@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <ostream>
+#include <type_traits>
 
 /**
  * Vec3 - 3D vector class for representing points, directions, and colors.
@@ -11,7 +12,7 @@
 struct Vec3 {
     float x, y, z;
 
-    Vec3(): x(0.0), y(0.0), z(0.0) {}
+    Vec3() = default;
     Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 
     float length() const {
@@ -120,6 +121,13 @@ inline std::ostream & operator << ( std::ostream & out, Vec3 v) {
     out << "[" << v.x << ", " << v.y << ", " << v.z << "]";
     return out;
 }
+
+// Performance Checks
+static_assert(std::is_trivially_copyable_v<Vec3>, "Vec3 must be trivially copyable for GPU compatibility!");
+
+static_assert(std::is_trivially_default_constructible_v<Vec3>, "Vec3 default constructor must be trivial for performance!");
+
+static_assert(sizeof(Vec3) == sizeof(float) * 3, "Vec3 has unexpected padding!");
 
 using Point3 = Vec3; 
 using Color = Vec3;
