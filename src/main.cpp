@@ -7,12 +7,12 @@
 #include "core/Vec3.h"
 #include "core/Ray.h"
 #include "geometry/Sphere.h"
-#include "geometry/Scene.h"
 #include "materials/Material.h"
 #include "materials/Lambertian.h"
 #include "materials/Dielectric.h"
 #include "renderer/TraceRay.h"
 #include "renderer/Camera.h"
+#include "renderer/Scene.h"
 #include "util/ProgressBar.h"
 
 extern std::atomic<uint64_t> gSphereHits;

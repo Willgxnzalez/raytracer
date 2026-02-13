@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "geometry/Scene.h"
+#include "renderer/Scene.h"
 #include "geometry/Sphere.h"
 #include "core/Ray.h"
 #include "core/HitRecord.h"
