@@ -12,13 +12,13 @@ Vec3 randomInUnitSphere() {
     }
 }
 
-Lambertian::Lambertian(const Vec3& _albedo) : albedo(_albedo) {} 
+Lambertian::Lambertian(const Color& _albedo) : albedo(_albedo) {} 
 
 bool Lambertian::scatter(
     const HitRecord& record, 
     const Ray& rayIn, 
     Ray& rayOut,
-    Vec3& attenuation 
+    Color& attenuation 
 ) const {
     Vec3 scatteredDirection = record.normal + randomInUnitSphere();
 

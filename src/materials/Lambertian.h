@@ -6,7 +6,7 @@
  * Material that diffuses light creating a matte texture
  */
 struct Lambertian : public Material {
-    Vec3 albedo; // Surface color
+    Color albedo; // Surface color
 
     Lambertian(const Vec3& albedo);
 
@@ -14,6 +14,6 @@ struct Lambertian : public Material {
         const HitRecord& record, 
         const Ray& rayIn, 
         Ray& rayOut,
-        Vec3& attenuation
+        Color& attenuation
     ) const override;
 };

@@ -92,7 +92,7 @@ int main() {
     for (int j = 0; j < imageHeight; ++j) {
         bar.update();
         for (int i = 0; i < imageWidth; ++i) {
-            Vec3 pixelColor(0,0,0);
+            Color pixelColor(0.0f ,0.0f ,0.0f);
             for (int s = 0; s < samplesPerPixel; ++s) { // Monte Carlo Sampling
                 Ray r = camera.shootRay(i, j);
                 pixelColor += traceRay(r, world, maxDepth);

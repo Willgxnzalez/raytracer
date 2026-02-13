@@ -10,7 +10,7 @@ struct Material; // forward declare
  * Key invariant: surface normal (normalized) always points against incoming ray direction
  */
 struct HitRecord {
-    Vec3 position;
+    Point3 position;
     Vec3 normal; // outward surface normal
     float t;
     bool frontFace;

@@ -120,3 +120,6 @@ inline std::ostream & operator << ( std::ostream & out, Vec3 v) {
     out << "[" << v.x << ", " << v.y << ", " << v.z << "]";
     return out;
 }
+
+using Point3 = Vec3; 
+using Color = Vec3;

@@ -6,8 +6,8 @@
  * Camera - Perspective camera with configurable field of view.
  */
 class Camera {
-    Vec3 origin_;     // Camera position (ray origin)
-    Vec3 lowerLeft_;  // world-space corner of viewport
+    Point3 origin_;     // Camera position (ray origin)
+    Point3 lowerLeft_;  // world-space corner of viewport
     Vec3 horizontal_; // viewport width vector
     Vec3 vertical_;   // viewport height vector
     Vec3 u_, v_, w_;  // Orthonomal basis: Right, Up, Back
@@ -33,8 +33,8 @@ public:
      * @param focusDistance Distance to the plane in perfect focus
      */
     Camera(
-        const Vec3& lookFrom, 
-        const Vec3& lookAt, 
+        const Point3& lookFrom, 
+        const Point3& lookAt, 
         const Vec3& vUp, 
         int imageWidth, 
         int imageHeight, 
