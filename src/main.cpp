@@ -11,8 +11,8 @@
 #include "materials/Material.h"
 #include "materials/Lambertian.h"
 #include "materials/Dielectric.h"
-#include "RayColor.h"
-#include "Camera.h"
+#include "renderer/TraceRay.h"
+#include "renderer/Camera.h"
 #include "util/ProgressBar.h"
 
 extern std::atomic<uint64_t> gSphereHits;
@@ -95,7 +95,7 @@ int main() {
             Vec3 pixelColor(0,0,0);
             for (int s = 0; s < samplesPerPixel; ++s) { // Monte Carlo Sampling
                 Ray r = camera.shootRay(i, j);
-                pixelColor += rayColor(r, world, maxDepth);
+                pixelColor += traceRay(r, world, maxDepth);
             }
             // Average samples and gamma correction
             double scale = 1.0 / samplesPerPixel;
