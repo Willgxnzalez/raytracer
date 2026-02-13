@@ -18,11 +18,11 @@
 Vec3 traceRay(const Ray& ray, const Hittable& scene, int maxDepth) {
     Ray currentRay = ray;
     Vec3 attenuation(1, 1, 1); // Start with full intensity white light
-    float epsilon = 1e-6;
+    float EPS = 1e-4f; // prevent self intersections
 
     for (int depth = 0; depth < maxDepth; ++depth) {
         HitRecord rec;
-        if (scene.hit(rec, currentRay, epsilon, INFINITY)) {
+        if (scene.hit(rec, currentRay, EPS, INFINITY)) {
             Ray scattered;
             Vec3 materialAttenuation;
             

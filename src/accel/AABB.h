@@ -19,7 +19,7 @@ struct AABB {
 
     inline bool hit(const Ray& ray, float tMin, float tMax) const {
         ++gAABBHits;
-        constexpr float EPS = 1e-8;
+        constexpr float EPS = 1e-5f;
 
         for (int axis = 0; axis < 3; ++axis) {
             float dir = ray.direction[axis];

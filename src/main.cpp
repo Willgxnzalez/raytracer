@@ -30,20 +30,20 @@ int main() {
     Scene world;
 
     // Materials
-    Lambertian grey(Vec3(0.3, 0.3, 0.3));
-    Lambertian red(Vec3(0.8, 0.1, 0.1));
-    Lambertian blue(Vec3(0.1, 0.1, 0.8));
-    Lambertian yellow(Vec3(0.8, 0.8, 0.1));
-    Lambertian cyan(Vec3(0.1, 0.8, 0.8));
+    Lambertian grey(Vec3(0.3f, 0.3f, 0.3f));
+    Lambertian red(Vec3(0.8f, 0.1f, 0.1f));
+    Lambertian blue(Vec3(0.1f, 0.1f, 0.8f));
+    Lambertian yellow(Vec3(0.8f, 0.8f, 0.1f));
+    Lambertian cyan(Vec3(0.1f, 0.8f, 0.8f));
     
     Dielectric glass(1.5);
 
     // Spheres
-    world.add(std::make_shared<Sphere>(Vec3(0, -100.5, 9), 100, &grey)); // ground
-    world.add(std::make_shared<Sphere>(Vec3(0, 0, -1), 0.5, &red));
-    world.add(std::make_shared<Sphere>(Vec3(-1, 0, 0), 0.5, &glass));
-    world.add(std::make_shared<Sphere>(Vec3(1, 0, 0), 0.5, &yellow));
-    world.add(std::make_shared<Sphere>(Vec3(0, 1, 0), 0.5, &glass));
+    world.add(std::make_shared<Sphere>(Vec3(0.0f, -100.5f, 9.0f), 100.0f, &grey)); // ground
+    world.add(std::make_shared<Sphere>(Vec3(0.0f, 0.0f, -1.0f), 0.5f, &red));
+    world.add(std::make_shared<Sphere>(Vec3(-1.0f, 0.0f, 0.0f), 0.5f, &glass));
+    world.add(std::make_shared<Sphere>(Vec3(1.0f, 0.0f, 0.0f), 0.5f, &yellow));
+    world.add(std::make_shared<Sphere>(Vec3(0.0f, 1.0f, 0.0f), 0.5f, &glass));
 
     // for (int x = -50; x <= 50; ++x) {
     //     for (int z = -50; z <= 50; ++z) {
@@ -69,8 +69,8 @@ int main() {
         Vec3{0, 1, 0},
         imageWidth, 
         imageHeight, 
-        75.0,
-        0.3,
+        75.0f,
+        0.3f,
         focusDistance // For testing, this is distance from the camera to the target object
     };
     // Output to file
@@ -98,7 +98,7 @@ int main() {
                 pixelColor += traceRay(r, world, maxDepth);
             }
             // Average samples and gamma correction
-            float scale = 1.0 / samplesPerPixel;
+            float scale = 1.0f / samplesPerPixel;
             float r = std::sqrt(pixelColor.x * scale);
             float g = std::sqrt(pixelColor.y * scale);
             float b = std::sqrt(pixelColor.z * scale);

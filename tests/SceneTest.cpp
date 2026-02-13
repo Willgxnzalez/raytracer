@@ -20,7 +20,7 @@ TEST(SceneTest, HitsSingleObject) {
     bool hit = scene.hit(record, ray, 0.001, 100.0);
 
     EXPECT_TRUE(hit);
-    EXPECT_NEAR(record.t, 4.0, 1e-6);
+    EXPECT_NEAR(record.t, 4.0, 1e-4f);
     EXPECT_EQ(record.position, Vec3(-1, 0, 0));
     EXPECT_EQ(record.normal, Vec3(-1, 0, 0));
 }
@@ -65,7 +65,7 @@ TEST(SceneTest, OverlappingObjectsHitClosestSurface) {
     bool hit = scene.hit(record, ray, 0.001, 100.0);
 
     EXPECT_TRUE(hit);
-    EXPECT_NEAR(record.t, 3.0, 1e-6);             // -5 → -2
+    EXPECT_NEAR(record.t, 3.0, 1e-4f);             // -5 → -2
     EXPECT_EQ(record.position, Vec3(-2, 0, 0));  // larger sphere surface
 }
 

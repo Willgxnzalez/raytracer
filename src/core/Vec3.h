@@ -27,7 +27,7 @@ struct Vec3 {
     }
 
     bool nearZero() const {
-        constexpr float s = 1e-8;
+        constexpr float s = 1e-5f;
         return (std::fabs(x) < s) && (std::fabs(y) < s) && (std::fabs(z) < s);
     }
 

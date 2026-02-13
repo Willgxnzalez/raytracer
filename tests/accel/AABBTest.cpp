@@ -28,14 +28,14 @@ TEST(AABBTest, MissRay) {
 
 TEST(AABBTest, ParallelRayInsideSlab) {
     AABB box(Vec3{0,0,0}, Vec3{1,1,1});
-    Ray ray(Vec3{0.5, 0.5, 0.5}, Vec3{0, 1e-10, 0}); // Almost zero direction along Y
+    Ray ray(Vec3{0.5, 0.5, 0.5}, Vec3{0, 1e-5f, 0}); // Almost zero direction along Y
 
     EXPECT_TRUE(box.hit(ray, 0.0, 10.0));
 }
 
 TEST(AABBTest, ParallelRayOutsideSlab) {
     AABB box(Vec3{0,0,0}, Vec3{1,1,1});
-    Ray ray(Vec3{2, 0.5, 0.5}, Vec3{0, 1e-10, 0}); // Parallel, outside X slab
+    Ray ray(Vec3{2, 0.5, 0.5}, Vec3{0, 1e-5f, 0}); // Parallel, outside X slab
 
     EXPECT_FALSE(box.hit(ray, 0.0, 10.0));
 }

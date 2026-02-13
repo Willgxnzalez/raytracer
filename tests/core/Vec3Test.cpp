@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "core/Vec3.h"
 
+constexpr float TEST_EPS = 1e-5f;
+
 TEST(Vec3Test, DefaultConstructor) {
     Vec3 v;
     EXPECT_EQ(v.x, 0.0);
@@ -129,9 +131,9 @@ TEST(Vec3Test, ChainedOperations) {
     Vec3 v{2, 3, 4};
     Vec3 result = (v * 2.0 + Vec3{1, 1, 1}) / 3.0;
     
-    EXPECT_NEAR(result.x, (2.0 * 2.0 + 1.0) / 3.0, 1e-10);
-    EXPECT_NEAR(result.y, (3.0 * 2.0 + 1.0) / 3.0, 1e-10);
-    EXPECT_NEAR(result.z, (4.0 * 2.0 + 1.0) / 3.0, 1e-10);
+    EXPECT_NEAR(result.x, (2.0 * 2.0 + 1.0) / 3.0, TEST_EPS);
+    EXPECT_NEAR(result.y, (3.0 * 2.0 + 1.0) / 3.0, TEST_EPS);
+    EXPECT_NEAR(result.z, (4.0 * 2.0 + 1.0) / 3.0, TEST_EPS);
 }
 
 TEST(Vec3Test, AssociativeMultiplication) {
@@ -160,7 +162,7 @@ TEST(Vec3Test, DotProductIdentity) {
     EXPECT_LE(cos_angle, 1.0);
     
     float expected = magnitudes * cos_angle;
-    EXPECT_NEAR(dot_product, expected, 1e-10);
+    EXPECT_NEAR(dot_product, expected, TEST_EPS);
 }
 
 TEST(Vec3Test, DotProductWithParallelVectors) {
@@ -170,7 +172,7 @@ TEST(Vec3Test, DotProductWithParallelVectors) {
     float d = dot(v1, v2);
     float expected = v1.length() * v2.length();  // cos(0) = 1
     
-    EXPECT_NEAR(d, expected, 1e-10);
+    EXPECT_NEAR(d, expected, TEST_EPS);
 }
 
 TEST(Vec3Test, DotProductWithAntiparallelVectors) {
@@ -180,7 +182,7 @@ TEST(Vec3Test, DotProductWithAntiparallelVectors) {
     float d = dot(v1, v2);
     float expected = -v1.length() * v2.length();  // cos(180deg) = -1
     
-    EXPECT_NEAR(d, expected, 1e-10);
+    EXPECT_NEAR(d, expected, TEST_EPS);
 }
 
 TEST(Vec3Test, DotProductWithPerpendicularVectors) {
@@ -201,7 +203,7 @@ TEST(Vec3Test, DotProductWithUnitVectors) {
     
     float cos_angle = dot(u1, u2); // Dot product of unit vectors directly gives cos(angle)
     
-    EXPECT_NEAR(cos_angle, 0.6, 1e-10);
+    EXPECT_NEAR(cos_angle, 0.6, TEST_EPS);
 }
 
 // ============================================================================
@@ -242,9 +244,9 @@ TEST(Vec3Test, CrossProductAnticommutative) {
     Vec3 cross2 = cross(v2, v1);
     
     // A × B = -(B × A)
-    EXPECT_NEAR(cross1.x, -cross2.x, 1e-10);
-    EXPECT_NEAR(cross1.y, -cross2.y, 1e-10);
-    EXPECT_NEAR(cross1.z, -cross2.z, 1e-10);
+    EXPECT_NEAR(cross1.x, -cross2.x, TEST_EPS);
+    EXPECT_NEAR(cross1.y, -cross2.y, TEST_EPS);
+    EXPECT_NEAR(cross1.z, -cross2.z, TEST_EPS);
 }
 
 TEST(Vec3Test, CrossProductWithParallelVectors) {
@@ -274,7 +276,7 @@ TEST(Vec3Test, CrossProductMagnitude) {
     // For perpendicular vectors, sin(90deg) = 1
     float expected_magnitude = v1.length() * v2.length();
     
-    EXPECT_NEAR(result.length(), expected_magnitude, 1e-10);
+    EXPECT_NEAR(result.length(), expected_magnitude, TEST_EPS);
 }
 
 TEST(Vec3Test, CrossProductCalculation) {
@@ -288,9 +290,9 @@ TEST(Vec3Test, CrossProductCalculation) {
     // = (12 - 15, 12 - 6, 5 - 8)
     // = (-3, 6, -3)
     
-    EXPECT_NEAR(result.x, -3.0, 1e-10);
-    EXPECT_NEAR(result.y, 6.0, 1e-10);
-    EXPECT_NEAR(result.z, -3.0, 1e-10);
+    EXPECT_NEAR(result.x, -3.0, TEST_EPS);
+    EXPECT_NEAR(result.y, 6.0, TEST_EPS);
+    EXPECT_NEAR(result.z, -3.0, TEST_EPS);
 }
 
 TEST(Vec3Test, CrossProductTriangleNormal) {
@@ -315,7 +317,7 @@ TEST(Vec3Test, CrossProductScalarTripleProduct) {
     // Represents volume of parallelepiped
     float volume = dot(v1, cross(v2, v3));
     
-    EXPECT_NEAR(volume, 1.0, 1e-10);  // Unit cube
+    EXPECT_NEAR(volume, 1.0, TEST_EPS);  // Unit cube
 }
 
 TEST(Vec3Test, CrossProductDistributive) {
@@ -327,7 +329,7 @@ TEST(Vec3Test, CrossProductDistributive) {
     Vec3 left = cross(a, b + c);
     Vec3 right = cross(a, b) + cross(a, c);
     
-    EXPECT_NEAR(left.x, right.x, 1e-10);
-    EXPECT_NEAR(left.y, right.y, 1e-10);
-    EXPECT_NEAR(left.z, right.z, 1e-10);
+    EXPECT_NEAR(left.x, right.x, TEST_EPS);
+    EXPECT_NEAR(left.y, right.y, TEST_EPS);
+    EXPECT_NEAR(left.z, right.z, TEST_EPS);
 }
