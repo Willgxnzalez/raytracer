@@ -1,7 +1,6 @@
 #include "accel/BVHTree.h"
 #include "geometry/Hittable.h"
 #include <memory>
-#include <random>
 #include <algorithm>
 
 void BVHTree::build(const HittableList& objects) {
@@ -51,9 +50,16 @@ std::unique_ptr<BVHNode> BVHTree::buildTree(
         node->box = prim.box;
         return node;
     } else {
-        static std::mt19937 gen(std::random_device{}());
-        std::uniform_int_distribution<int> axisDis(0, 2);
-        int axis = axisDis(gen);
+        // Choose axis with largest extent (SAH-lite)
+        AABB bounds = prims[start].box;
+        for (size_t i = start + 1; i < end; ++i) {
+            bounds = surroundingBox(bounds, prims[i].box);
+        }
+        
+        Vec3 extent = bounds.max - bounds.min;
+        int axis = 0;
+        if (extent.y > extent.x) axis = 1;
+        if (extent.z > extent[axis]) axis = 2;
 
         // sort by box centroids
         std::sort(prims.begin() + start, prims.begin() + end, 
