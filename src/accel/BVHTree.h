@@ -14,8 +14,8 @@ public:
     bool hit(
         HitRecord& record,
         const Ray& ray,
-        double tMin,
-        double tMax
+        float tMin,
+        float tMax
     ) const;
 
     AABB boundingBox() const;

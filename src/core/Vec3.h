@@ -9,32 +9,32 @@
  *   - color: Represents RGB color values
  */
 struct Vec3 {
-    double x, y, z;
+    float x, y, z;
 
     Vec3(): x(0.0), y(0.0), z(0.0) {}
-    Vec3(double x, double y, double z) : x(x), y(y), z(z) {}
+    Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 
-    double length() const {
+    float length() const {
         return std::sqrt(x * x + y * y + z * z);
     }
-    double lengthSquared() const {
+    float lengthSquared() const {
         return x * x + y * y + z * z;
     }
 
     Vec3 normalized() const {
-        double mag = length();
+        float mag = length();
         return Vec3(x / mag, y / mag, z / mag);
     }
 
     bool nearZero() const {
-        constexpr double s = 1e-8;
+        constexpr float s = 1e-8;
         return (std::fabs(x) < s) && (std::fabs(y) < s) && (std::fabs(z) < s);
     }
 
-    double operator[](int i) const {
+    float operator[](int i) const {
         return i == 0 ? x : (i == 1 ? y : z);
     }
-    double& operator[](int i) {
+    float& operator[](int i) {
         return i == 0 ? x : (i == 1 ? y : z);
     }
 
@@ -56,7 +56,7 @@ struct Vec3 {
         return *this;
     }
 
-    Vec3& operator*=(double s) {
+    Vec3& operator*=(float s) {
         x *= s;
         y *= s;
         z *= s;
@@ -70,7 +70,7 @@ struct Vec3 {
         return *this;
     }
     
-    Vec3& operator/=(double s) {
+    Vec3& operator/=(float s) {
         x /= s;
         y /= s;
         z /= s;
@@ -90,15 +90,15 @@ inline Vec3 operator*(const Vec3& a, const Vec3& b) {
     return Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
 }
 
-inline Vec3 operator*(const Vec3& v, double s) {
+inline Vec3 operator*(const Vec3& v, float s) {
     return Vec3(v.x * s, v.y * s, v.z * s);
 }
 
-inline Vec3 operator*(double s, const Vec3& v) {
+inline Vec3 operator*(float s, const Vec3& v) {
     return v * s;
 }
 
-inline Vec3 operator/(const Vec3& v, double s) {
+inline Vec3 operator/(const Vec3& v, float s) {
     return v * (1/s);
 }
 
@@ -106,7 +106,7 @@ inline bool operator==(const Vec3& a, const Vec3& b) {
     return a.x == b.x && a.y == b.y && a.z == b.z;
 }
 
-inline double dot(const Vec3& a, const Vec3& b) { // How much 2 vectors align
+inline float dot(const Vec3& a, const Vec3& b) { // How much 2 vectors align
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 

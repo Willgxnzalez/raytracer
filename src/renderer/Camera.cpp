@@ -4,22 +4,22 @@
 #include <cmath>
 #include <iostream>
 
-double degreesToRadians(double degrees) {
+float degreesToRadians(float degrees) {
     return degrees * (std::numbers::pi / 180);
 }
 
-double randomOffset() {
+float randomOffset() {
     static std::mt19937 gen(std::random_device{}());
-    static std::uniform_real_distribution<double> dis(0.0, 1.0);
+    static std::uniform_real_distribution<float> dis(0.0, 1.0);
     return dis(gen);
 }
 
 Vec3 randomPointOnUnitDisk() {
     static std::mt19937 gen(std::random_device{}());
-    static std::uniform_real_distribution<double> angleDis(0.0, 2.0 * std::numbers::pi);
-    static std::uniform_real_distribution<double> radiusDis(0.0, 1.0); 
-    double angle = angleDis(gen);
-    double radius = std::sqrt(radiusDis(gen));
+    static std::uniform_real_distribution<float> angleDis(0.0, 2.0 * std::numbers::pi);
+    static std::uniform_real_distribution<float> radiusDis(0.0, 1.0); 
+    float angle = angleDis(gen);
+    float radius = std::sqrt(radiusDis(gen));
     return Vec3{std::cos(angle) * radius, std::sin(angle) * radius, 0};
 }
 
@@ -29,9 +29,9 @@ Camera::Camera(
     const Vec3& vUp, 
     int imageWidth, 
     int imageHeight, 
-    double vFovDegrees,
-    double aperture,
-    double focusDistance
+    float vFovDegrees,
+    float aperture,
+    float focusDistance
 ) :
     origin_(lookFrom), 
     imageWidth_(imageWidth), 
@@ -40,10 +40,10 @@ Camera::Camera(
     focusDistance_(focusDistance)
 {
     // Using Tan(vFov/2) = (viewportHeight/2) / 1 (focalLength)
-    double aspectRatio = static_cast<double>(imageWidth_) / static_cast<double>(imageHeight_);
-    double theta = degreesToRadians(vFovDegrees);
-    double viewportHeight = std::tan(theta / 2) * 2.0;
-    double viewportWidth = viewportHeight * aspectRatio;
+    float aspectRatio = static_cast<float>(imageWidth_) / static_cast<float>(imageHeight_);
+    float theta = degreesToRadians(vFovDegrees);
+    float viewportHeight = std::tan(theta / 2) * 2.0;
+    float viewportWidth = viewportHeight * aspectRatio;
 
     w_ = (origin_ - lookAt).normalized(); // camera backward
     u_ = cross(vUp, w_).normalized(); // camera right
@@ -57,8 +57,8 @@ Camera::Camera(
 
 Ray Camera::shootRay(int i, int j) const {
     // Map randomly sampled point within pixel(i, j) to normalized 3D coordinate inside viewport
-    double px = (i + randomOffset()) / (imageWidth_ - 1); // 0 (left) to 1 (right)
-    double py = (imageHeight_ - 1 - j + randomOffset()) / (imageHeight_ - 1); // 1 (top edge) to 0 (bottom edge)
+    float px = (i + randomOffset()) / (imageWidth_ - 1); // 0 (left) to 1 (right)
+    float py = (imageHeight_ - 1 - j + randomOffset()) / (imageHeight_ - 1); // 1 (top edge) to 0 (bottom edge)
 
     Vec3 viewportPoint = lowerLeft_ + px * horizontal_ + py * vertical_;
     Vec3 direction = viewportPoint - origin_;

@@ -26,7 +26,7 @@ protected:
         tree.reset();
     }
 
-    std::shared_ptr<Hittable> makeSphere(const Vec3& center, double radius) {
+    std::shared_ptr<Hittable> makeSphere(const Vec3& center, float radius) {
         return std::make_shared<Sphere>(center, radius, material.get());
     }
 

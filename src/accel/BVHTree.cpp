@@ -25,8 +25,8 @@ void BVHTree::build(const HittableList& objects) {
 bool BVHTree::hit(
     HitRecord& record,
     const Ray& ray,
-    double tMin,
-    double tMax
+    float tMin,
+    float tMax
 ) const {
     if (!root_) return false;
     return root_->hit(record, ray, tMin, tMax);
@@ -58,8 +58,8 @@ std::unique_ptr<BVHNode> BVHTree::buildTree(
         // sort by box centroids
         std::sort(prims.begin() + start, prims.begin() + end, 
             [axis](const BVHPrimitive& a, const BVHPrimitive&b) {
-                double centroidA = (a.box.min[axis] + a.box.max[axis]) * 0.5;
-                double centroidB = (b.box.min[axis] + b.box.max[axis]) * 0.5;
+                float centroidA = (a.box.min[axis] + a.box.max[axis]) * 0.5;
+                float centroidB = (b.box.min[axis] + b.box.max[axis]) * 0.5;
                 return centroidA < centroidB;
             }
         );

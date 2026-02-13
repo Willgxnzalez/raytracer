@@ -22,8 +22,8 @@ struct Scene : Hittable {
     virtual bool hit(
         HitRecord& record,
         const Ray& ray, 
-        double tMin, 
-        double tMax
+        float tMin, 
+        float tMax
     ) const override {
         return bvh.hit(record, ray, tMin, tMax);
     }
@@ -36,11 +36,11 @@ struct Scene : Hittable {
 // bool hit(
 //     HitRecord& record,
 //     const Ray& ray, 
-//     double tMin, 
-//     double tMax
+//     float tMin, 
+//     float tMax
 // ) const {
 //     HitRecord tempRecord;
-//     double tClosest = tMax;
+//     float tClosest = tMax;
 //     bool hitDetected = false;
 
 //     // Find closest intersection by progressively narrowing search range

@@ -60,7 +60,7 @@ int main() {
     // Cyan
     Vec3 cameraPosition{-2, 2, 2};
     Vec3 focusTarget{0, 1, 0};
-    double focusDistance = (focusTarget - cameraPosition).length();
+    float focusDistance = (focusTarget - cameraPosition).length();
 
     // Camera
     Camera camera{
@@ -98,14 +98,14 @@ int main() {
                 pixelColor += traceRay(r, world, maxDepth);
             }
             // Average samples and gamma correction
-            double scale = 1.0 / samplesPerPixel;
-            double r = std::sqrt(pixelColor.x * scale);
-            double g = std::sqrt(pixelColor.y * scale);
-            double b = std::sqrt(pixelColor.z * scale);
+            float scale = 1.0 / samplesPerPixel;
+            float r = std::sqrt(pixelColor.x * scale);
+            float g = std::sqrt(pixelColor.y * scale);
+            float b = std::sqrt(pixelColor.z * scale);
 
-            outFile << static_cast<int>(256 * std::clamp(r,0.0,0.999)) << ' '
-                    << static_cast<int>(256 * std::clamp(g,0.0,0.999)) << ' '
-                    << static_cast<int>(256 * std::clamp(b,0.0,0.999)) << '\n';
+            outFile << static_cast<int>(256 * std::clamp(r,0.0f,0.999f)) << ' '
+                    << static_cast<int>(256 * std::clamp(g,0.0f,0.999f)) << ' '
+                    << static_cast<int>(256 * std::clamp(b,0.0f,0.999f)) << '\n';
         }
     }
     std::cout << "AABB tests:   " << gAABBHits   << "\n";

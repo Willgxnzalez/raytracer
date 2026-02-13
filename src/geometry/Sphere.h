@@ -9,16 +9,16 @@ struct Material; // forward declare
  */
 struct Sphere : public Hittable {
     Vec3 center;
-    double radius;
+    float radius;
     const Material* material;
 
-    Sphere(const Vec3& center, double radius, const Material* material);
+    Sphere(const Vec3& center, float radius, const Material* material);
 
     bool hit(
         HitRecord& record,
         const Ray& ray, 
-        double tMin, 
-        double tMax
+        float tMin, 
+        float tMax
     ) const override;
 
     AABB boundingBox() const override;

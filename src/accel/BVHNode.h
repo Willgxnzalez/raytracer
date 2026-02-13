@@ -19,8 +19,8 @@ struct BVHNode : public Hittable {
     bool hit(
         HitRecord& record,
         const Ray& ray,
-        double tMin,
-        double tMax
+        float tMin,
+        float tMax
     ) const override;
 
     AABB boundingBox() const override;

@@ -14,7 +14,7 @@ class Camera {
 
     int imageWidth_, imageHeight_;
     
-    double aperture_, focusDistance_;
+    float aperture_, focusDistance_;
 
 public:
     /**
@@ -38,9 +38,9 @@ public:
         const Vec3& vUp, 
         int imageWidth, 
         int imageHeight, 
-        double vFovDegrees,
-        double aperture,
-        double focusDistance
+        float vFovDegrees,
+        float aperture,
+        float focusDistance
     );
 
     Ray shootRay(int i, int j) const;

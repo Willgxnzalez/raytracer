@@ -151,15 +151,15 @@ TEST(Vec3Test, DotProductIdentity) {
     Vec3 v1{1, 2, 3};
     Vec3 v2{4, 5, 6};
     
-    double dot_product = dot(v1, v2);
-    double magnitudes = v1.length() * v2.length();
-    double cos_angle = dot_product / magnitudes;
+    float dot_product = dot(v1, v2);
+    float magnitudes = v1.length() * v2.length();
+    float cos_angle = dot_product / magnitudes;
     
     // cos(angle) should be between -1 and 1
     EXPECT_GE(cos_angle, -1.0);
     EXPECT_LE(cos_angle, 1.0);
     
-    double expected = magnitudes * cos_angle;
+    float expected = magnitudes * cos_angle;
     EXPECT_NEAR(dot_product, expected, 1e-10);
 }
 
@@ -167,8 +167,8 @@ TEST(Vec3Test, DotProductWithParallelVectors) {
     Vec3 v1{3, 4, 0};  // length = 5
     Vec3 v2{6, 8, 0};  // length = 10, same direction
     
-    double d = dot(v1, v2);
-    double expected = v1.length() * v2.length();  // cos(0) = 1
+    float d = dot(v1, v2);
+    float expected = v1.length() * v2.length();  // cos(0) = 1
     
     EXPECT_NEAR(d, expected, 1e-10);
 }
@@ -177,8 +177,8 @@ TEST(Vec3Test, DotProductWithAntiparallelVectors) {
     Vec3 v1{3, 4, 0};   // length = 5
     Vec3 v2{-3, -4, 0}; // length = 5, opposite direction
     
-    double d = dot(v1, v2);
-    double expected = -v1.length() * v2.length();  // cos(180deg) = -1
+    float d = dot(v1, v2);
+    float expected = -v1.length() * v2.length();  // cos(180deg) = -1
     
     EXPECT_NEAR(d, expected, 1e-10);
 }
@@ -187,7 +187,7 @@ TEST(Vec3Test, DotProductWithPerpendicularVectors) {
     Vec3 v1{1, 0, 0};  // X-axis
     Vec3 v2{0, 1, 0};  // Y-axis
     
-    double d = dot(v1, v2);
+    float d = dot(v1, v2);
     
     EXPECT_EQ(d, 0.0);  // cos(90deg) = 0
 }
@@ -199,7 +199,7 @@ TEST(Vec3Test, DotProductWithUnitVectors) {
     Vec3 u1 = v1.normalized();
     Vec3 u2 = v2.normalized();
     
-    double cos_angle = dot(u1, u2); // Dot product of unit vectors directly gives cos(angle)
+    float cos_angle = dot(u1, u2); // Dot product of unit vectors directly gives cos(angle)
     
     EXPECT_NEAR(cos_angle, 0.6, 1e-10);
 }
@@ -272,7 +272,7 @@ TEST(Vec3Test, CrossProductMagnitude) {
     
     // |A × B| = |A||B|sin(angle)
     // For perpendicular vectors, sin(90deg) = 1
-    double expected_magnitude = v1.length() * v2.length();
+    float expected_magnitude = v1.length() * v2.length();
     
     EXPECT_NEAR(result.length(), expected_magnitude, 1e-10);
 }
@@ -313,7 +313,7 @@ TEST(Vec3Test, CrossProductScalarTripleProduct) {
     
     // Scalar triple product: A · (B × C)
     // Represents volume of parallelepiped
-    double volume = dot(v1, cross(v2, v3));
+    float volume = dot(v1, cross(v2, v3));
     
     EXPECT_NEAR(volume, 1.0, 1e-10);  // Unit cube
 }

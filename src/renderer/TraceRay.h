@@ -18,7 +18,7 @@
 Vec3 traceRay(const Ray& ray, const Hittable& scene, int maxDepth) {
     Ray currentRay = ray;
     Vec3 attenuation(1, 1, 1); // Start with full intensity white light
-    double epsilon = 1e-6;
+    float epsilon = 1e-6;
 
     for (int depth = 0; depth < maxDepth; ++depth) {
         HitRecord rec;
@@ -35,7 +35,7 @@ Vec3 traceRay(const Ray& ray, const Hittable& scene, int maxDepth) {
         } else {
             // Hit background - compute and return final color
             Vec3 unitDir = currentRay.direction.normalized();
-            double t = 0.5 * (unitDir.y + 1.0);
+            float t = 0.5 * (unitDir.y + 1.0);
             Vec3 backgroundColor = (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0);
             return attenuation * backgroundColor;
         }

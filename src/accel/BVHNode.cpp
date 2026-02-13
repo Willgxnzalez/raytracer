@@ -7,8 +7,8 @@
 bool BVHNode::hit(
     HitRecord& record, 
     const Ray& ray, 
-    double tMin, 
-    double tMax
+    float tMin, 
+    float tMax
 ) const {
     if (!box.hit(ray, tMin, tMax)) {
         return false;

@@ -7,14 +7,14 @@
 
 inline std::atomic<uint64_t> gSphereHits = 0;
 
-Sphere::Sphere(const Vec3& center, double radius, const Material* material)
+Sphere::Sphere(const Vec3& center, float radius, const Material* material)
     : center(center), radius(radius), material(material) {}
 
 bool Sphere::hit(
     HitRecord& record,
     const Ray& ray, 
-    double tMin, 
-    double tMax
+    float tMin, 
+    float tMax
 ) const {
     ++gSphereHits;
     // Points on sphere: |P - C|^2 = r^2 -> point P on sphere if its distance from center C is equal to radius
@@ -26,17 +26,17 @@ bool Sphere::hit(
     Vec3 oc = ray.origin - center;
     
     // Discriminant = (b/2)^2-ac
-    double a = dot(ray.direction, ray.direction);
-    double halfB = dot(ray.direction, oc);
-    double c = dot(oc, oc) - radius * radius;
-    double discriminant = halfB * halfB - a * c;
+    float a = dot(ray.direction, ray.direction);
+    float halfB = dot(ray.direction, oc);
+    float c = dot(oc, oc) - radius * radius;
+    float discriminant = halfB * halfB - a * c;
 
     if (discriminant < 0) return false;
 
-    double tMinus = (-halfB - std::sqrt(discriminant)) / a;
-    double tPlus = (-halfB + std::sqrt(discriminant)) / a;
+    float tMinus = (-halfB - std::sqrt(discriminant)) / a;
+    float tPlus = (-halfB + std::sqrt(discriminant)) / a;
 
-    double t;
+    float t;
     if (tMin < tMinus && tMinus < tMax ) 
         t = tMinus;
     else if (tMin < tPlus && tPlus < tMax ) 

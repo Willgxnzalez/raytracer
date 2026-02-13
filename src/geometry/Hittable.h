@@ -25,8 +25,8 @@ struct Hittable {
     virtual bool hit(
         HitRecord& record,
         const Ray& ray, 
-        double tMin, 
-        double tMax
+        float tMin, 
+        float tMax
     ) const = 0;
 
     virtual AABB boundingBox() const = 0;

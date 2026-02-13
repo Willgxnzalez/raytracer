@@ -19,7 +19,7 @@ public:
 
 private:
     void display() {
-        double progress = static_cast<double>(currentStep_) / totalSteps_;
+        float progress = static_cast<float>(currentStep_) / totalSteps_;
         int filledWidth = static_cast<int>(progress * barWidth_);
         
         out_ << "\r[";

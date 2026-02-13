@@ -12,7 +12,7 @@ struct Material; // forward declare
 struct HitRecord {
     Vec3 position;
     Vec3 normal; // outward surface normal
-    double t;
+    float t;
     bool frontFace;
     const Material* material;
 
