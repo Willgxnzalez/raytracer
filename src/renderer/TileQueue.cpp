@@ -1,7 +1,7 @@
 #include "renderer/TileQueue.h"
 
 
-TileQueue::TileQueue(int imageWidth, int imageHeight, int tileSize) {
+TileQueue::TileQueue(int imageWidth, int imageHeight, int tileSize) : index(0) {
     for (int y = 0; y < imageHeight; y += tileSize) {
         for (int x = 0; x < imageWidth; x += tileSize) {
             tiles.push_back({

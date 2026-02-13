@@ -4,11 +4,11 @@
 #include <vector>
 
 class Film {
-    std::vector<Color> pixels;
+    std::vector<Color> pixels_;
     int width_, height_;
 
 public:
-    Film(int width, int height) {}
+    Film(int imageWidth, int imageHeight);
 
     void colorPixel(int x, int y, const Color&  color);
     void output(const char* path);

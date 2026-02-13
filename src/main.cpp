@@ -85,8 +85,11 @@ int main() {
     std::clog << "Writing to " << outputPath << std::endl;
     ProgressBar bar(std::clog, imageHeight);
 
+    RNG rng{1111};
+
     // Output PPM header
     outFile << "P3\n" << imageWidth << " " << imageHeight << "\n255\n";
+
 
     // Loop over pixels
     for (int j = 0; j < imageHeight; ++j) {
@@ -94,8 +97,8 @@ int main() {
         for (int i = 0; i < imageWidth; ++i) {
             Color pixelColor(0.0f ,0.0f ,0.0f);
             for (int s = 0; s < samplesPerPixel; ++s) { // Monte Carlo Sampling
-                Ray r = camera.shootRay(i, j);
-                pixelColor += traceRay(r, world, maxDepth);
+                Ray r = camera.shootRay(i, j, rng);
+                pixelColor += traceRay(r, world, rng, maxDepth);
             }
             // Average samples and gamma correction
             float scale = 1.0f / samplesPerPixel;

@@ -7,8 +7,11 @@
 
 inline std::atomic<uint64_t> gSphereHits = 0;
 
-Sphere::Sphere(const Vec3& center, float radius, const Material* material)
-    : center(center), radius(radius), material(material) {}
+Sphere::Sphere(const Point3& center, float radius, const Material* material) : 
+    center(center), 
+    radius(radius), 
+    material(material) 
+{}
 
 bool Sphere::hit(
     HitRecord& record,
