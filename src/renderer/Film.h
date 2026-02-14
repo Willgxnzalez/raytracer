@@ -2,6 +2,7 @@
 
 #include "core/Vec3.h"
 #include <vector>
+#include <string>
 
 class Film {
     std::vector<Color> pixels_;
@@ -11,5 +12,5 @@ public:
     Film(int imageWidth, int imageHeight);
 
     void colorPixel(int x, int y, const Color&  color);
-    void output(const char* path);
+    void output(const std::string& path) const;
 };
