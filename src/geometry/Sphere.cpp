@@ -45,7 +45,7 @@ bool Sphere::hit(
 
     record.t = t;
     record.position = ray.at(t);
-    Vec3 outwardNormal = (record.position - center) / radius;
+    Vec3 outwardNormal = (record.position - center).normalized();
     record.setFaceNormal(ray.direction, outwardNormal);
     record.material = material;
     return true;
