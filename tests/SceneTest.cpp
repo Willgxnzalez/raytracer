@@ -17,7 +17,7 @@ TEST(SceneTest, HitsSingleObject) {
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
     HitRecord record;
 
-    bool hit = scene.hit(record, ray, 0.001, 100.0);
+    bool hit = scene.intersect(record, ray, 0.001, 100.0);
 
     EXPECT_TRUE(hit);
     EXPECT_NEAR(record.t, 4.0, 1e-4f);
@@ -34,7 +34,7 @@ TEST(SceneTest, ReturnsNearestHit) {
     Ray ray{Vec3{0, 0, 0}, Vec3{1, 0, 0}};
     HitRecord record;
 
-    bool hit = scene.hit(record, ray, 0.001, 100.0);
+    bool hit = scene.intersect(record, ray, 0.001, 100.0);
 
     EXPECT_TRUE(hit);
     EXPECT_EQ(record.position, Vec3(4, 0, 0));   // nearest sphere
@@ -50,7 +50,7 @@ TEST(SceneTest, RayMissesAllObjects) {
     Ray ray{Vec3{0, 5, 0}, Vec3{1, 0, 0}};
     HitRecord record;
 
-    EXPECT_FALSE(scene.hit(record, ray, 0.001, 100.0));
+    EXPECT_FALSE(scene.intersect(record, ray, 0.001, 100.0));
 }
 
 TEST(SceneTest, OverlappingObjectsHitClosestSurface) {
@@ -62,7 +62,7 @@ TEST(SceneTest, OverlappingObjectsHitClosestSurface) {
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
     HitRecord record;
 
-    bool hit = scene.hit(record, ray, 0.001, 100.0);
+    bool hit = scene.intersect(record, ray, 0.001, 100.0);
 
     EXPECT_TRUE(hit);
     EXPECT_NEAR(record.t, 3.0, 1e-4f);             // -5 → -2
@@ -77,7 +77,7 @@ TEST(SceneTest, RespectsTMinAndTMax) {
     Ray ray{Vec3{0, 0, 0}, Vec3{0, 0, -1}};
     HitRecord record;
 
-    EXPECT_FALSE(scene.hit(record, ray, 6.0, 100.0)); // tMin past hit
-    EXPECT_FALSE(scene.hit(record, ray, 0.001, 3.0)); // tMax before hit
-    EXPECT_TRUE(scene.hit(record, ray, 0.001, 100.0));
+    EXPECT_FALSE(scene.intersect(record, ray, 6.0, 100.0)); // tMin past hit
+    EXPECT_FALSE(scene.intersect(record, ray, 0.001, 3.0)); // tMax before hit
+    EXPECT_TRUE(scene.intersect(record, ray, 0.001, 100.0));
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "geometry/Hittable.h"
 #include "core/Ray.h"
 #include "core/Vec3.h"
 #include "core/HitRecord.h"
@@ -18,14 +17,14 @@
  * @param maxDepth Maximum number of bounces allowed
  * @return Final color accumulated along the ray path
  */
-Color traceRay(const Ray& ray, const Hittable& scene, RNG& rng, int maxDepth) {
+Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth) {
     Ray currentRay = ray;
     Color attenuation(1.0f, 1.0f, 1.0f); // Start with full intensity white light
     float EPS = 1e-4f; // prevent self intersections
 
     for (int depth = 0; depth < maxDepth; ++depth) {
         HitRecord rec;
-        if (scene.hit(rec, currentRay, EPS, INFINITY)) {
+        if (scene.intersect(rec, currentRay, EPS, INFINITY)) {
             Ray scattered;
             Color materialAttenuation;
             

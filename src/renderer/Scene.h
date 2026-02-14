@@ -1,14 +1,14 @@
 #pragma once
-#include "geometry/Hittable.h"
 #include "accel/BVHTree.h"
 
 /**
  * Scene - Owns scene geometry and BVH acceleration structure
  */
-struct Scene : Hittable {
+class Scene {
     HittableList objects;
     BVHTree bvh;
 
+public:
     Scene() = default;
 
     void add(std::shared_ptr<Hittable> object) {
@@ -19,38 +19,12 @@ struct Scene : Hittable {
         bvh.build(objects);
     }
 
-    virtual bool hit(
+    bool intersect(
         HitRecord& record,
         const Ray& ray, 
         float tMin, 
         float tMax
-    ) const override {
+    ) const {
         return bvh.hit(record, ray, tMin, tMax);
     }
-
-    AABB boundingBox() const override {
-        return bvh.boundingBox();
-    }
 };
-
-// bool hit(
-//     HitRecord& record,
-//     const Ray& ray, 
-//     float tMin, 
-//     float tMax
-// ) const {
-//     HitRecord tempRecord;
-//     float tClosest = tMax;
-//     bool hitDetected = false;
-
-//     // Find closest intersection by progressively narrowing search range
-//     for (const auto& object : objects) {
-//         if (object->hit(tempRecord, ray, tMin, tClosest)) { // Use closest hit so far as new tMax
-//             hitDetected = true;
-//             tClosest = tempRecord.t; // Update closest distance
-//             record = tempRecord; // save this hit
-//         }
-//     }
-
-//     return hitDetected;
-// }

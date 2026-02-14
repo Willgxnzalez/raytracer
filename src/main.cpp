@@ -17,7 +17,7 @@ int main() {
     const int imageWidth = 1920;
     const int imageHeight = 1080;
     const int samplesPerPixel = 100;
-    const int maxDepth = 50;
+    const int maxDepth = 10;
 
     // Scene
     Scene world;
@@ -41,7 +41,7 @@ int main() {
 
     // Hero spheres (3 large spheres in foreground)
     // world.add(std::make_shared<Sphere>(Vec3(-0.5f, 1.0f, -3.0f), 1.0f, &));      // Left - matte
-    world.add(std::make_shared<Sphere>(Vec3(0.0f, 1.0f, -2.0f), 1.0f, &brown));      // Center - reflective
+    world.add(std::make_shared<Sphere>(Vec3(0.0f, 1.0f, -2.0f), 1.0f, &brown));      // Center - matte
     world.add(std::make_shared<Sphere>(Vec3(0.5f, 1.0f, -1.0f), 1.0f, &glass));       // Right - glass
 
     // Random small spheres scattered on ground
