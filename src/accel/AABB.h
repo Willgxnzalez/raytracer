@@ -4,8 +4,6 @@
 #include <iostream>
 #include <atomic>
 
-inline std::atomic<uint64_t> gAABBHits = 0;
-
 /**
  * Axis-Aligned Bounding Box
  * Defined by minimum and maximum corners.
@@ -18,7 +16,6 @@ struct AABB {
     AABB(const Vec3& minCorner, const Vec3& maxCorner) : min(minCorner), max(maxCorner) {}
 
     inline bool hit(const Ray& ray, float tMin, float tMax) const {
-        ++gAABBHits;
         constexpr float EPS = 1e-5f;
 
         for (int axis = 0; axis < 3; ++axis) {

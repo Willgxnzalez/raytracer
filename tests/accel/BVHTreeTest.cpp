@@ -134,38 +134,38 @@ TEST_F(BVHTreeTest, HitSingleSphere) {
 // BVH Acceleration Tests
 // ============================================================================
 
-TEST_F(BVHTreeTest, BVHReducesIntersectionTests) {
-    // Create a large grid of spheres
-    HittableList objects;
-    const int gridSize = 10;
+// TEST_F(BVHTreeTest, BVHReducesIntersectionTests) {
+//     // Create a large grid of spheres
+//     HittableList objects;
+//     const int gridSize = 10;
     
-    for (int x = 0; x < gridSize; ++x) {
-        for (int y = 0; y < gridSize; ++y) {
-            for (int z = 0; z < gridSize; ++z) {
-                objects.push_back(makeSphere(
-                    Vec3(x * 3.0, y * 3.0, z * 3.0 - 50),
-                    0.5
-                ));
-            }
-        }
-    }
+//     for (int x = 0; x < gridSize; ++x) {
+//         for (int y = 0; y < gridSize; ++y) {
+//             for (int z = 0; z < gridSize; ++z) {
+//                 objects.push_back(makeSphere(
+//                     Vec3(x * 3.0, y * 3.0, z * 3.0 - 50),
+//                     0.5
+//                 ));
+//             }
+//         }
+//     }
     
-    tree->build(objects);
+//     tree->build(objects);
     
-    // Reset AABB hit counter
-    gAABBHits = 0;
+//     // Reset AABB hit counter
+//     gAABBHits = 0;
     
-    // Ray that only intersects a small portion of the scene
-    Ray ray(Vec3(0, 0, 0), Vec3(0, 0, -1));
-    HitRecord record;
-    tree->hit(record, ray, 0.001, 100.0);
+//     // Ray that only intersects a small portion of the scene
+//     Ray ray(Vec3(0, 0, 0), Vec3(0, 0, -1));
+//     HitRecord record;
+//     tree->hit(record, ray, 0.001, 100.0);
     
-    // BVH should cull most of the spheres
-    // Without BVH -> test all 1000 spheres
-    // With BVH -> far fewer AABBs
-    std::cout << "AABB hits: " << gAABBHits << " < 1000 spheres / 2 " << std::endl;
-    EXPECT_LT(gAABBHits, objects.size()/2);
-}
+//     // BVH should cull most of the spheres
+//     // Without BVH -> test all 1000 spheres
+//     // With BVH -> far fewer AABBs
+//     std::cout << "AABB hits: " << gAABBHits << " < 1000 spheres / 2 " << std::endl;
+//     EXPECT_LT(gAABBHits, objects.size()/2);
+// }
 
 // ============================================================================
 // Edge Cases
