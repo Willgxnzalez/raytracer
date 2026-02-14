@@ -47,7 +47,7 @@ void Renderer::render(const Camera& camera, const Scene& scene, const std::strin
 }
 
 void Renderer::renderWorker(int threadId, const Camera& camera, const Scene& scene) {
-    RNG rng{globalSeed_, threadId};
+    RNG rng{globalSeed_, static_cast<uint64_t>(threadId)};
 
     Tile tile;
     while(queue_.next(tile)) {
