@@ -4,6 +4,8 @@
 #include "util/RNG.h"
 #include <thread>
 #include <vector>
+#include <chrono>
+#include <iostream>
 
 using namespace std::chrono;
 
@@ -18,7 +20,10 @@ Renderer::Renderer(int imageWidth, int imageHeight, int samplesPerPixel, int til
 {}
 
 void Renderer::render(const Camera& camera, const Scene& scene, const std::string& path) {
-    
+    using namespace std::chrono;
+
+    auto start = high_resolution_clock::now();
+
     int numThreads = std::thread::hardware_concurrency();
     std::vector<std::thread> threads;
 
@@ -36,6 +41,9 @@ void Renderer::render(const Camera& camera, const Scene& scene, const std::strin
         t.join();
 
     film_.output(path);
+
+    auto dur = high_resolution_clock::now() - start;
+    std::cout << "Elapsed Time: " << duration_cast<seconds>(dur).count() << "s" << std::endl;
 }
 
 void Renderer::renderWorker(int threadId, const Camera& camera, const Scene& scene) {
