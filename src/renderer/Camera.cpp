@@ -53,11 +53,16 @@ Ray Camera::shootRay(int x, int y, RNG& rng) const {
 
     Point3 viewportPoint = lowerLeft_ + sx * horizontal_ + sy * vertical_;
     Vec3 direction = viewportPoint - origin_;
-    Point3 focusPoint = origin_ + focusDistance_ * direction.normalized(); // Point on focus plane
-    Vec3 lensOffset = randomPointOnUnitDisk(rng) * (aperture_ / 2);
-    Vec3 offset = u_ * lensOffset.x + v_ * lensOffset.y;
-    Point3 rayOrigin = origin_ + offset;
-    Vec3 rayDirection = focusPoint - rayOrigin;
 
-    return Ray{rayOrigin, rayDirection};
+    // Pinhole camera
+    if (aperture_ <= 0.0f) {
+        return Ray{origin_, direction};
+    }
+
+    // Depth of field
+    Point3 focusPoint = origin_ + focusDistance_ * direction.normalized();
+    Vec3 lensOffset = randomPointOnUnitDisk(rng) * (aperture_ / 2.0f);
+    Vec3 offset = u_ * lensOffset.x + v_ * lensOffset.y;
+    
+    return Ray{origin_ + offset, focusPoint - (origin_ + offset)};
 }

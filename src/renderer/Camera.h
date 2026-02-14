@@ -40,8 +40,8 @@ public:
         int imageWidth, 
         int imageHeight, 
         float vFovDegrees,
-        float aperture,
-        float focusDistance
+        float aperture = 0.0f,
+        float focusDistance = 0.0f
     );
 
     Ray shootRay(int x, int y, RNG& rng) const;
