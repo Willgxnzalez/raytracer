@@ -34,4 +34,8 @@ public:
     float uniform(float min, float maxExclusive) {
         return min + (maxExclusive - min) * uniform01();
     }
+
+    int uniformInt(int min, int maxExclusive) {
+        return min + (nextUInt() % (maxExclusive - min));
+    }
 };
