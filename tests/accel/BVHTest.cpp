@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include "accel/BVHTree.h"
-#include "accel/BVHNode.h"
+#include "accel/BVH.h"
 #include "accel/AABB.h"
 #include "geometry/Sphere.h"
 #include "core/Ray.h"
@@ -15,7 +14,7 @@
 // Test Fixtures
 // ============================================================================
 
-class BVHTreeTest : public ::testing::Test {
+class BVHTest : public ::testing::Test {
 protected:
     void SetUp() override {
         material = std::make_shared<Lambertian>(Vec3(0.5, 0.5, 0.5));
@@ -38,32 +37,32 @@ protected:
 // Construction Tests
 // ============================================================================
 
-TEST_F(BVHTreeTest, BuildEmptyTree) {
+TEST_F(BVHTest, BuildEmptyTree) {
     HittableList objects;
     tree->build(objects);
     SUCCEED();  // Doesn't crash
 }
 
-TEST_F(BVHTreeTest, BuildSingleObjectCreatesLeaf) {
+TEST_F(BVHTest, BuildSingleObjectCreatesLeaf) {
     HittableList objects;
     objects.push_back(makeSphere(Vec3(0,0,0), 1.0));
     tree->build(objects);
-    EXPECT_TRUE(tree->root()->isLeaf());
+    EXPECT_TRUE(tree->root().isLeaf());
 }
 
-TEST_F(BVHTreeTest, BuildTwoObjectsCreatesInternalNode) {
+TEST_F(BVHTest, BuildTwoObjectsCreatesInternalNode) {
     HittableList objects;
     objects.push_back(makeSphere(Vec3(-2,0,0), 1.0));
     objects.push_back(makeSphere(Vec3(2,0,0), 1.0));
     tree->build(objects);
-    EXPECT_FALSE(tree->root()->isLeaf());
+    EXPECT_FALSE(tree->root().isLeaf());
 }
 
 // ============================================================================
 // Bounding Box Tests
 // ============================================================================
 
-TEST_F(BVHTreeTest, LeafNodeBoundingBoxMatchesObject) {
+TEST_F(BVHTest, LeafNodeBoundingBoxMatchesObject) {
     HittableList objects;
     auto sphere = makeSphere(Vec3(5, 3, -2), 2.0);
     objects.push_back(sphere);
@@ -76,7 +75,7 @@ TEST_F(BVHTreeTest, LeafNodeBoundingBoxMatchesObject) {
     EXPECT_EQ(treeBox.max, sphereBox.max);
 }
 
-TEST_F(BVHTreeTest, InternalNodeBoundingBoxIsUnion) {
+TEST_F(BVHTest, InternalNodeBoundingBoxIsUnion) {
     HittableList objects;
     auto sphere1 = makeSphere(Vec3(-10, 0, 0), 1.0);
     auto sphere2 = makeSphere(Vec3(10, 0, 0), 1.0);
@@ -91,7 +90,7 @@ TEST_F(BVHTreeTest, InternalNodeBoundingBoxIsUnion) {
     EXPECT_EQ(box.max, unionBox.max);
 }
 
-TEST_F(BVHTreeTest, BoundingBoxContainsAllObjects) {
+TEST_F(BVHTest, BoundingBoxContainsAllObjects) {
     HittableList objects;
 
     // Create a 5x5 grid of spheres
@@ -114,7 +113,7 @@ TEST_F(BVHTreeTest, BoundingBoxContainsAllObjects) {
 // Ray Intersection Tests
 // ============================================================================
 
-TEST_F(BVHTreeTest, HitSingleSphere) {
+TEST_F(BVHTest, HitSingleSphere) {
     HittableList objects;
     objects.push_back(makeSphere(Vec3(0, 0, 0), 1.0));
     tree->build(objects);
@@ -134,7 +133,7 @@ TEST_F(BVHTreeTest, HitSingleSphere) {
 // BVH Acceleration Tests
 // ============================================================================
 
-// TEST_F(BVHTreeTest, BVHReducesIntersectionTests) {
+// TEST_F(BVHTest, BVHReducesIntersectionTests) {
 //     // Create a large grid of spheres
 //     HittableList objects;
 //     const int gridSize = 10;
@@ -171,7 +170,7 @@ TEST_F(BVHTreeTest, HitSingleSphere) {
 // Edge Cases
 // ============================================================================
 
-TEST_F(BVHTreeTest, IdenticalSpherePositions) {
+TEST_F(BVHTest, IdenticalSpherePositions) {
     HittableList objects;
     Vec3 pos(0, 0, -5);
     
@@ -190,7 +189,7 @@ TEST_F(BVHTreeTest, IdenticalSpherePositions) {
     EXPECT_TRUE(hit);
 }
 
-TEST_F(BVHTreeTest, RayParallelToSplitAxis) {
+TEST_F(BVHTest, RayParallelToSplitAxis) {
     HittableList objects;
     
     // Create spheres along x-axis
@@ -207,7 +206,7 @@ TEST_F(BVHTreeTest, RayParallelToSplitAxis) {
     EXPECT_TRUE(hit);
 }
 
-TEST_F(BVHTreeTest, VerifyBVHHierarchy) {
+TEST_F(BVHTest, VerifyBVHHierarchy) {
     HittableList objects;
     
     // Create 8 spheres (will create a tree of depth 3)

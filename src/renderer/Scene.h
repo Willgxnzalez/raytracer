@@ -1,5 +1,5 @@
 #pragma once
-#include "accel/BVHTree.h"
+#include "accel/BVH.h"
 
 /**
  * Scene - Owns scene geometry and BVH acceleration structure
