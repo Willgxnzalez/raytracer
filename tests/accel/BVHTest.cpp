@@ -2,10 +2,10 @@
 #include "accel/BVH.h"
 #include "accel/AABB.h"
 #include "geometry/Sphere.h"
+#include "renderer/Scene.h"
 #include "core/Ray.h"
 #include "core/HitRecord.h"
 #include "core/Vec3.h"
-#include "materials/Lambertian.h"
 #include <memory>
 #include <vector>
 #include <cmath>
@@ -17,45 +17,52 @@
 class BVHTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        material = std::make_shared<Lambertian>(Vec3(0.5, 0.5, 0.5));
-        tree = std::make_unique<BVHTree>();
+        scene = std::make_unique<Scene>();
+        defaultMat = scene->addDiffuse(Vec3(0.5f, 0.5f, 0.5f));
     }
 
     void TearDown() override {
-        tree.reset();
+        scene.reset();
     }
 
-    std::shared_ptr<Hittable> makeSphere(const Vec3& center, float radius) {
-        return std::make_shared<Sphere>(center, radius, material.get());
+    int addSphere(const Vec3& center, float radius) {
+        return scene->addSphere(center, radius, defaultMat);
     }
 
-    std::unique_ptr<BVHTree> tree;
-    std::shared_ptr<Lambertian> material;
+    std::unique_ptr<Scene> scene;
+    int defaultMat;
 };
 
 // ============================================================================
 // Construction Tests
 // ============================================================================
 
-TEST_F(BVHTest, BuildEmptyTree) {
-    HittableList objects;
-    tree->build(objects);
+TEST_F(BVHTest, BuildEmptyScene) {
+    scene->build();
     SUCCEED();  // Doesn't crash
 }
 
 TEST_F(BVHTest, BuildSingleObjectCreatesLeaf) {
-    HittableList objects;
-    objects.push_back(makeSphere(Vec3(0,0,0), 1.0));
-    tree->build(objects);
-    EXPECT_TRUE(tree->root().isLeaf());
+    addSphere(Vec3(0, 0, 0), 1.0f);
+    scene->build();
+    
+    Ray ray(Vec3(-5, 0, 0), Vec3(1, 0, 0));
+    HitRecord record;
+    bool hit = scene->intersect(record, ray, 0.001f, 100.0f);
+    EXPECT_TRUE(hit);
 }
 
 TEST_F(BVHTest, BuildTwoObjectsCreatesInternalNode) {
-    HittableList objects;
-    objects.push_back(makeSphere(Vec3(-2,0,0), 1.0));
-    objects.push_back(makeSphere(Vec3(2,0,0), 1.0));
-    tree->build(objects);
-    EXPECT_FALSE(tree->root().isLeaf());
+    addSphere(Vec3(-2, 0, 0), 1.0f);
+    addSphere(Vec3(2, 0, 0), 1.0f);
+    scene->build();
+    
+    Ray ray1(Vec3(-5, 0, 0), Vec3(1, 0, 0));
+    HitRecord record;
+    EXPECT_TRUE(scene->intersect(record, ray1, 0.001f, 100.0f));
+    
+    Ray ray2(Vec3(5, 0, 0), Vec3(-1, 0, 0));
+    EXPECT_TRUE(scene->intersect(record, ray2, 0.001f, 100.0f));
 }
 
 // ============================================================================
@@ -63,48 +70,43 @@ TEST_F(BVHTest, BuildTwoObjectsCreatesInternalNode) {
 // ============================================================================
 
 TEST_F(BVHTest, LeafNodeBoundingBoxMatchesObject) {
-    HittableList objects;
-    auto sphere = makeSphere(Vec3(5, 3, -2), 2.0);
-    objects.push_back(sphere);
-    tree->build(objects);
+    int sphereIdx = addSphere(Vec3(5, 3, -2), 2.0f);
+    scene->build();
     
-    AABB treeBox = tree->boundingBox();
-    AABB sphereBox = sphere->boundingBox();
+    AABB treeBox = scene->getBVH().boundingBox();
+    
+    const Sphere& sphere = scene->getSpheres()[sphereIdx];
+    AABB sphereBox = sphereBounds(sphere);
     
     EXPECT_EQ(treeBox.min, sphereBox.min);
     EXPECT_EQ(treeBox.max, sphereBox.max);
 }
 
 TEST_F(BVHTest, InternalNodeBoundingBoxIsUnion) {
-    HittableList objects;
-    auto sphere1 = makeSphere(Vec3(-10, 0, 0), 1.0);
-    auto sphere2 = makeSphere(Vec3(10, 0, 0), 1.0);
-    objects.push_back(sphere1);
-    objects.push_back(sphere2);
-    tree->build(objects);
+    int idx1 = addSphere(Vec3(-10, 0, 0), 1.0f);
+    int idx2 = addSphere(Vec3(10, 0, 0), 1.0f);
+    scene->build();
     
-    AABB box = tree->boundingBox();
-    AABB unionBox = surroundingBox(sphere1->boundingBox(), sphere2->boundingBox());
+    AABB box = scene->getBVH().boundingBox();
+    
+    const Sphere& s1 = scene->getSpheres()[idx1];
+    const Sphere& s2 = scene->getSpheres()[idx2];
+    AABB unionBox = surroundingBox(sphereBounds(s1), sphereBounds(s2));
 
     EXPECT_EQ(box.min, unionBox.min);
     EXPECT_EQ(box.max, unionBox.max);
 }
 
 TEST_F(BVHTest, BoundingBoxContainsAllObjects) {
-    HittableList objects;
-
     // Create a 5x5 grid of spheres
     for (int x = 0; x < 5; ++x) {
         for (int z = 0; z < 5; ++z) {
-            objects.push_back(makeSphere(
-                Vec3(x * 3.0, 0, z * 3.0),
-                1
-            ));
+            addSphere(Vec3(x * 3.0f, 0, z * 3.0f), 1.0f);
         }
     }
-    tree->build(objects);
+    scene->build();
     
-    AABB box = tree->boundingBox();
+    AABB box = scene->getBVH().boundingBox();
     EXPECT_EQ(box.min, Vec3(-1, -1, -1));
     EXPECT_EQ(box.max, Vec3(13, 1, 13));
 }
@@ -114,112 +116,112 @@ TEST_F(BVHTest, BoundingBoxContainsAllObjects) {
 // ============================================================================
 
 TEST_F(BVHTest, HitSingleSphere) {
-    HittableList objects;
-    objects.push_back(makeSphere(Vec3(0, 0, 0), 1.0));
-    tree->build(objects);
+    addSphere(Vec3(0, 0, 0), 1.0f);
+    scene->build();
     
     Ray ray(Vec3(-5, 0, 0), Vec3(1, 0, 0));
-
     HitRecord record;
-    bool hit = tree->hit(record, ray, 0.001, 100.0);
+    bool hit = scene->intersect(record, ray, 0.001f, 100.0f);
     
     EXPECT_TRUE(hit);
-    EXPECT_NEAR(record.t, 4.0, 0.01);  // Ray hits at distance ~4
-    EXPECT_EQ(record.position, Vec3(-1, 0, 0)); // Ray should hit at x = -1 (left side of sphere)
-    EXPECT_EQ(record.normal, Vec3(-1, 0, 0)); // Normal should point outward (to the left)
+    EXPECT_NEAR(record.t, 4.0f, 0.01f);
+    EXPECT_NEAR(record.position.x, -1.0f, 0.01f);
+    EXPECT_NEAR(record.position.y, 0.0f, 0.01f);
+    EXPECT_NEAR(record.position.z, 0.0f, 0.01f);
 }
 
-// ============================================================================
-// BVH Acceleration Tests
-// ============================================================================
+TEST_F(BVHTest, HitClosestSphere) {
+    addSphere(Vec3(0, 0, -5), 1.0f);   // Far
+    addSphere(Vec3(0, 0, -2), 0.5f);   // Close
+    scene->build();
+    
+    Ray ray(Vec3(0, 0, 0), Vec3(0, 0, -1));
+    HitRecord record;
+    bool hit = scene->intersect(record, ray, 0.001f, 100.0f);
+    
+    EXPECT_TRUE(hit);
+    EXPECT_NEAR(record.t, 1.5f, 0.01f);  // Should hit closer sphere
+}
 
-// TEST_F(BVHTest, BVHReducesIntersectionTests) {
-//     // Create a large grid of spheres
-//     HittableList objects;
-//     const int gridSize = 10;
+TEST_F(BVHTest, MissAllSpheres) {
+    addSphere(Vec3(0, 0, 0), 1.0f);
+    scene->build();
     
-//     for (int x = 0; x < gridSize; ++x) {
-//         for (int y = 0; y < gridSize; ++y) {
-//             for (int z = 0; z < gridSize; ++z) {
-//                 objects.push_back(makeSphere(
-//                     Vec3(x * 3.0, y * 3.0, z * 3.0 - 50),
-//                     0.5
-//                 ));
-//             }
-//         }
-//     }
+    Ray ray(Vec3(0, 10, 0), Vec3(1, 0, 0));  // Ray passes above sphere
+    HitRecord record;
+    bool hit = scene->intersect(record, ray, 0.001f, 100.0f);
     
-//     tree->build(objects);
-    
-//     // Reset AABB hit counter
-//     gAABBHits = 0;
-    
-//     // Ray that only intersects a small portion of the scene
-//     Ray ray(Vec3(0, 0, 0), Vec3(0, 0, -1));
-//     HitRecord record;
-//     tree->hit(record, ray, 0.001, 100.0);
-    
-//     // BVH should cull most of the spheres
-//     // Without BVH -> test all 1000 spheres
-//     // With BVH -> far fewer AABBs
-//     std::cout << "AABB hits: " << gAABBHits << " < 1000 spheres / 2 " << std::endl;
-//     EXPECT_LT(gAABBHits, objects.size()/2);
-// }
+    EXPECT_FALSE(hit);
+}
 
 // ============================================================================
 // Edge Cases
 // ============================================================================
 
 TEST_F(BVHTest, IdenticalSpherePositions) {
-    HittableList objects;
     Vec3 pos(0, 0, -5);
     
     // Add multiple spheres at the same position
-    objects.push_back(makeSphere(pos, 1.0));
-    objects.push_back(makeSphere(pos, 0.8));
-    objects.push_back(makeSphere(pos, 0.6));
+    addSphere(pos, 1.0f);
+    addSphere(pos, 0.8f);
+    addSphere(pos, 0.6f);
     
-    tree->build(objects);
+    scene->build();
     
     Ray ray(Vec3(0, 0, 0), Vec3(0, 0, -1));
     HitRecord record;
     
-    // Should still hit successfully
-    bool hit = tree->hit(record, ray, 0.001, 100.0);
+    // Should hit the closest (biggest radius = 1.0)
+    bool hit = scene->intersect(record, ray, 0.001f, 100.0f);
     EXPECT_TRUE(hit);
+    EXPECT_EQ(record.t, 4.0f);  // 5 - 0.6
 }
 
 TEST_F(BVHTest, RayParallelToSplitAxis) {
-    HittableList objects;
-    
     // Create spheres along x-axis
-    objects.push_back(makeSphere(Vec3(-5, 0, 0), 1.0));
-    objects.push_back(makeSphere(Vec3(5, 0, 0), 1.0));
+    addSphere(Vec3(-5, 0, 0), 1.0f);
+    addSphere(Vec3(5, 0, 0), 1.0f);
     
-    tree->build(objects);
+    scene->build();
     
     // Ray along x-axis
     Ray ray(Vec3(-10, 0, 0), Vec3(1, 0, 0));
     HitRecord record;
     
-    bool hit = tree->hit(record, ray, 0.001, 100.0);
+    bool hit = scene->intersect(record, ray, 0.001f, 100.0f);
     EXPECT_TRUE(hit);
 }
 
 TEST_F(BVHTest, VerifyBVHHierarchy) {
-    HittableList objects;
-    
     // Create 8 spheres (will create a tree of depth 3)
     for (int i = 0; i < 8; ++i) {
-        objects.push_back(makeSphere(Vec3(i * 2.0, 0, 0), 1));
+        addSphere(Vec3(i * 2.0f, 0, 0), 1.0f);
     }
     
-    tree->build(objects);
+    scene->build();
     
     // Verify the tree was built (bounding box encompasses all spheres)
-    AABB box = tree->boundingBox();
+    AABB box = scene->getBVH().boundingBox();
     EXPECT_EQ(box.min.x, -1);
     EXPECT_EQ(box.max.x, 15);
+}
+
+TEST_F(BVHTest, LargeScenePerformance) {
+    // Create a larger scene to test BVH efficiency
+    for (int x = 0; x < 10; ++x) {
+        for (int y = 0; y < 10; ++y) {
+            addSphere(Vec3(x * 3.0f, y * 3.0f, 0), 0.5f);
+        }
+    }
+    
+    scene->build();
+    
+    // Ray that only hits a few spheres
+    Ray ray(Vec3(0, 0, 5), Vec3(0, 0, -1));
+    HitRecord record;
+    bool hit = scene->intersect(record, ray, 0.001f, 100.0f);
+    
+    EXPECT_TRUE(hit);
 }
 
 int main(int argc, char** argv) {

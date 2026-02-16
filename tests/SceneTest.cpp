@@ -11,7 +11,7 @@
 
 TEST(SceneTest, HitsSingleObject) {
     Scene scene;
-    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0, nullptr));
+    scene.addSphere(Vec3{0, 0, 0}, 1.0, 0);
     scene.build();
 
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
@@ -27,8 +27,8 @@ TEST(SceneTest, HitsSingleObject) {
 
 TEST(SceneTest, ReturnsNearestHit) {
     Scene scene;
-    scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0, nullptr));
-    scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0, nullptr));
+    scene.addSphere(Vec3{5, 0, 0}, 1.0, 0);
+    scene.addSphere(Vec3{10, 0, 0}, 1.0, 0);
     scene.build();
 
     Ray ray{Vec3{0, 0, 0}, Vec3{1, 0, 0}};
@@ -43,8 +43,8 @@ TEST(SceneTest, ReturnsNearestHit) {
 
 TEST(SceneTest, RayMissesAllObjects) {
     Scene scene;
-    scene.add(std::make_shared<Sphere>(Vec3{5, 0, 0}, 1.0, nullptr));
-    scene.add(std::make_shared<Sphere>(Vec3{10, 0, 0}, 1.0, nullptr));
+    scene.addSphere(Vec3{5, 0, 0}, 1.0, 0);
+    scene.addSphere(Vec3{10, 0, 0}, 1.0, 0);
     scene.build();
 
     Ray ray{Vec3{0, 5, 0}, Vec3{1, 0, 0}};
@@ -55,8 +55,8 @@ TEST(SceneTest, RayMissesAllObjects) {
 
 TEST(SceneTest, OverlappingObjectsHitClosestSurface) {
     Scene scene;
-    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 2.0, nullptr));
-    scene.add(std::make_shared<Sphere>(Vec3{0, 0, 0}, 1.0, nullptr));
+    scene.addSphere(Vec3{0, 0, 0}, 2.0, 0);
+    scene.addSphere(Vec3{0, 0, 0}, 1.0, 0);
     scene.build();
 
     Ray ray{Vec3{-5, 0, 0}, Vec3{1, 0, 0}};
@@ -71,7 +71,7 @@ TEST(SceneTest, OverlappingObjectsHitClosestSurface) {
 
 TEST(SceneTest, RespectsTMinAndTMax) {
     Scene scene;
-    scene.add(std::make_shared<Sphere>(Vec3{0, 0, -5}, 1.0, nullptr));
+    scene.addSphere(Vec3{0, 0, -5}, 1.0, 0);
     scene.build();
 
     Ray ray{Vec3{0, 0, 0}, Vec3{0, 0, -1}};
