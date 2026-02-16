@@ -3,9 +3,6 @@
 #include "core/Vec3.h"
 #include "core/Ray.h"
 #include "geometry/Sphere.h"
-#include "materials/Material.h"
-#include "materials/Lambertian.h"
-#include "materials/Dielectric.h"
 #include "renderer/Camera.h"
 #include "renderer/Scene.h"
 #include "renderer/Renderer.h"
@@ -14,8 +11,8 @@
 
 int main() {
     // Image
-    const int imageWidth = 1920;
-    const int imageHeight = 1080;
+    const int imageWidth = 800;
+    const int imageHeight = 640;
     const int samplesPerPixel = 100;
     const int maxDepth = 10;
 
@@ -23,26 +20,25 @@ int main() {
     Scene world;
 
     // Materials
-    Lambertian ground(Vec3(0.5f, 0.5f, 0.5f));  // Lighter ground
-    Lambertian red(Vec3(0.8f, 0.1f, 0.1f));
-    Lambertian blue(Vec3(0.1f, 0.1f, 0.8f));
-    Lambertian yellow(Vec3(0.8f, 0.8f, 0.1f));
-    Lambertian green(Vec3(0.1f, 0.8f, 0.1f));
-    Lambertian cyan(Vec3(0.1f, 0.7f, 0.9f));
-    Lambertian purple(Vec3(0.6f, 0.1f, 0.8f));
-    Lambertian orange(Vec3(0.9f, 0.5f, 0.1f));
-    Lambertian brown(Vec3(0.6f, 0.4f, 0.2f));
+    int ground = world.addDiffuse(Vec3(0.5f, 0.5f, 0.5f));
+    int red =  world.addDiffuse(Vec3(0.8f, 0.1f, 0.1f));
+    int blue = world.addDiffuse(Vec3(0.1f, 0.1f, 0.8f));
+    int yellow = world.addDiffuse(Vec3(0.8f, 0.8f, 0.1f));
+    int green = world.addDiffuse(Vec3(0.1f, 0.8f, 0.1f));
+    int cyan = world.addDiffuse(Vec3(0.1f, 0.7f, 0.9f));
+    int purple = world.addDiffuse(Vec3(0.6f, 0.1f, 0.8f));
+    int orange = world.addDiffuse(Vec3(0.9f, 0.5f, 0.1f));
+    int brown = world.addDiffuse(Vec3(0.6f, 0.4f, 0.2f));
 
-    Lambertian colors[] = {red, blue, yellow, green, cyan, purple, orange};
-    Dielectric glass(1.5f);
+    int colors[] = {red, blue, yellow, green, cyan, purple, orange};
+    int glass = world.addDielectric(1.5f);
 
     // Ground plane
-    world.add(std::make_shared<Sphere>(Vec3(0.0f, -1000.0f, 0.0f), 1000.0f, &ground));
+    world.addSphere(Vec3(0.0f, -1000.0f, 0.0f), 1000.0f, ground);
 
-    // Hero spheres (3 large spheres in foreground)
-    // world.add(std::make_shared<Sphere>(Vec3(-0.5f, 1.0f, -3.0f), 1.0f, &));      // Left - matte
-    world.add(std::make_shared<Sphere>(Vec3(0.0f, 1.0f, -2.0f), 1.0f, &brown));      // Center - matte
-    world.add(std::make_shared<Sphere>(Vec3(0.5f, 1.0f, -1.0f), 1.0f, &glass));       // Right - glass
+    // Sphere(Vec3(-0.5f, 1.0f, -3.0f), 1.0f, &);      // Left - matte
+    world.addSphere(Vec3(0.0f, 1.0f, -2.0f), 1.0f, brown);      // Center - matte
+    world.addSphere(Vec3(0.5f, 1.0f, -1.0f), 1.0f, glass);       // Right - glass
 
     // Random small spheres scattered on ground
     RNG rng{42};
@@ -52,9 +48,8 @@ int main() {
             0.4f,  // Small elevation
             rng.uniform(-7.5f, 2.0f)
         );
-        world.add(std::make_shared<Sphere>(center, 0.4f, &colors[rng.uniformInt(0, 7)]));
+        world.addSphere(center, 0.4f, colors[rng.uniformInt(0, 7)]);
     }
-
     world.build();
 
     // Camera setup - lower angle looking slightly up
