@@ -9,7 +9,12 @@
 
 using namespace std::chrono;
 
-Renderer::Renderer(int imageWidth, int imageHeight, int samplesPerPixel, int tileSize, int maxDepth) :   
+Renderer::Renderer(
+    int imageWidth,
+    int imageHeight,
+    int samplesPerPixel,
+    int tileSize, int maxDepth
+) :   
     imageWidth_(imageWidth), 
     imageHeight_(imageHeight),
     samplesPerPixel_(samplesPerPixel),

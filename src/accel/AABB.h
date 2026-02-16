@@ -15,20 +15,19 @@ struct AABB {
     AABB() = default;
     AABB(const Vec3& minCorner, const Vec3& maxCorner) : min(minCorner), max(maxCorner) {}
 
-    inline bool hit(const Ray& ray, float tMin, float tMax) const {
+    bool hit(const Ray& ray, float tMin, float tMax) const {
         constexpr float EPS = 1e-5f;
 
         for (int axis = 0; axis < 3; ++axis) {
             float dir = ray.direction[axis];
             float t0, t1;
 
-            if (std::abs(dir) > EPS) { // Treat nearly parallel rays as parellel to avoid numerical blowup 
+            if (std::abs(dir) > EPS) { // Treat nearly parallel rays as parallel to avoid numerical blowup 
                 float invDir = 1.0 / dir;
                 t0 = (min[axis] - ray.origin[axis]) * invDir;
                 t1 = (max[axis] - ray.origin[axis]) * invDir;
                 if (invDir < 0) std::swap(t0, t1);
             } else { // Ray parallel to slab
-                
                 if (ray.origin[axis] < min[axis] || ray.origin[axis] > max[axis])
                     return false;
                 t0 = -INFINITY;

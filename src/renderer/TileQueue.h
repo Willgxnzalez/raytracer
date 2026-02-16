@@ -9,10 +9,12 @@ struct Tile {
 };
 
 class TileQueue {
-    std::atomic<int> index;
-    std::vector<Tile> tiles;
-
 public:
     TileQueue(int imageWidth, int imageHeight, int tileSize);
+
     bool next(Tile& tile);
+
+private:
+    std::atomic<int> index;
+    std::vector<Tile> tiles;
 };

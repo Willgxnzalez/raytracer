@@ -7,16 +7,6 @@
  * Camera - Perspective camera with configurable field of view.
  */
 class Camera {
-    Point3 origin_;     // Camera position (ray origin)
-    Point3 lowerLeft_;  // world-space corner of viewport
-    Vec3 horizontal_; // viewport width vector
-    Vec3 vertical_;   // viewport height vector
-    Vec3 u_, v_, w_;  // Orthonomal basis: Right, Up, Back
-
-    int imageWidth_, imageHeight_;
-    
-    float aperture_, focusDistance_;
-
 public:
     /**
      * Construct a perspective camera.
@@ -45,4 +35,15 @@ public:
     );
 
     Ray shootRay(int x, int y, RNG& rng) const;
+
+private:
+    Point3 origin_;    // Camera position (ray origin)
+    Point3 lowerLeft_; // world-space corner of viewport
+    Vec3 horizontal_;  // viewport width vector
+    Vec3 vertical_;    // viewport height vector
+    Vec3 u_, v_, w_;   // Orthonomal basis: Right, Up, Back
+
+    int imageWidth_, imageHeight_;
+    
+    float aperture_, focusDistance_;
 };

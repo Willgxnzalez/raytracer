@@ -8,6 +8,19 @@
 #include <string>
 
 class Renderer {
+public: 
+    Renderer(
+        int imageWidth, 
+        int imageHeight, 
+        int samplesPerPixel, 
+        int tileSize = 16, 
+        int maxDepth = 5
+    );
+
+    void render(const Camera& camera, const Scene& scene, const std::string& path);
+    void renderWorker(int threadId, const Camera& camera, const Scene& scene);
+
+private:
     int imageWidth_, imageHeight_;
     int samplesPerPixel_;
     int tileSize_;
@@ -17,10 +30,4 @@ class Renderer {
     TileQueue queue_;
 
     const uint64_t globalSeed_ = 1215;
-
-public: 
-    Renderer(int imageWidth, int imageHeight, int samplesPerPixel, int tileSize = 16, int maxDepth = 5);
-
-    void render(const Camera& camera, const Scene& scene, const std::string& path);
-    void renderWorker(int threadId, const Camera& camera, const Scene& scene);
 };

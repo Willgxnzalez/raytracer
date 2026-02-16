@@ -2,9 +2,6 @@
 #include <cstdint>
 
 class RNG {
-    uint64_t state;
-    uint64_t inc;
-
 public:
     RNG(uint64_t seed, uint64_t sequence = 1) {
         state = 0;
@@ -38,4 +35,8 @@ public:
     int uniformInt(int min, int maxExclusive) {
         return min + (nextUInt() % (maxExclusive - min));
     }
+
+private:
+    uint64_t state;
+    uint64_t inc;
 };
