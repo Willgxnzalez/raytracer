@@ -23,7 +23,8 @@ public:
     };
     
     // Material creation
-    int addDiffuse(const Color& albedo);
+    int addDiffuse(const Color& color);
+    int addMetal(const Color& color, float roughness = 0.0f);
     int addDielectric(float ior);
     
     // Geometry creation
@@ -43,6 +44,7 @@ public:
     const std::vector<Sphere>& getSpheres() const { return spheres_; }
     const std::vector<Material>& getMaterials() const { return materials_; }
     const std::vector<PrimitiveRef>& getPrimitives() const { return primitives_; }
+    const BVHTree& getBVH() const { return bvh_; }
     
 private:
     std::vector<Sphere> spheres_;

@@ -13,6 +13,19 @@ int Scene::addDiffuse(const Color& color) {
     return static_cast<int>(materials_.size() - 1);
 }
 
+int Scene::addMetal(const Color& color, float roughness) {
+    Material m{};
+    m.type = MaterialType::Metal;
+    m.color = color;
+    m.roughness = roughness;
+    m.metallic = 0.0f;
+    m.ior = 1.0f;
+    m.emission = Color{0.0f, 0.0f, 0.0f};
+
+    materials_.push_back(m);
+    return static_cast<int>(materials_.size() - 1);
+}
+
 int Scene::addDielectric(float indexOfRefraction)
 {
     Material m{};
