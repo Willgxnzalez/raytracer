@@ -36,11 +36,22 @@ bool scatter(
     RNG& rng
 ) {
     switch (material.type) {
-        case MaterialType::Diffuse: { // Pure diffuse - cosine-weighted hemisphere sampling
+        case MaterialType::Diffuse: {
+            // Pure diffuse - cosine-weighted hemisphere sampling
             Vec3 scatteredDirection = record.normal + randomUnitVector(rng);
             rayOut = Ray{record.position, scatteredDirection};
             attenuation = material.color;
             return true;
+        }
+
+        case MaterialType::Metal: {
+            // Roughness simulates microscopic surface imperfections that scatter
+            // reflected light into a cone around the perfect reflection direction.
+            Vec3 reflected = reflect(rayIn.direction, record.normal);
+            Vec3 scatteredDirection = reflected + material.roughness * randomInUnitSphere(rng); 
+            rayOut = Ray{record.position, scatteredDirection};
+            attenuation = material.color;
+            return dot(scatteredDirection, record.normal) > 0;
         }
 
         case MaterialType::Dielectric: {

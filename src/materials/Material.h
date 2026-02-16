@@ -20,7 +20,7 @@ struct Material {
     MaterialType type;
     Color color;
 
-    float roughness; 
+    float roughness; // 0.0 = perfect mirror, 1.0 = blurry reflection / brushed surface
     float metallic;  // 0.0 = pure diffuse, 1.0 = pure metal
     float ior;       // Index of refraction: how much light bends (air=1.0, water=1.33, glass=1.5, diamond=2.4)
 
