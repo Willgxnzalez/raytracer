@@ -4,6 +4,7 @@
 #include "core/Vec3.h"
 #include "core/HitRecord.h"
 #include "materials/Material.h"
+#include "materials/Scatter.h"
 #include "util/RNG.h"
 #include <cmath>
 
@@ -20,15 +21,15 @@
 Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth) {
     Ray currentRay = ray;
     Color attenuation(1.0f, 1.0f, 1.0f); // Start with full intensity white light
-    float EPS = 1e-4f; // prevent self intersections
+    float SHADOW_EPS = 1e-2f; // prevent self intersections
 
+    const auto& materials = scene.getMaterials();
     for (int depth = 0; depth < maxDepth; ++depth) {
         HitRecord rec;
-        if (scene.intersect(rec, currentRay, EPS, INFINITY)) {
+        if (scene.intersect(rec, currentRay, SHADOW_EPS, INFINITY)) {
             Ray scattered;
             Color materialAttenuation;
-            
-            if (rec.material->scatter(rec, currentRay, scattered, materialAttenuation, rng)) {
+            if (scatter(materials[rec.materialIndex], rec, currentRay, scattered, materialAttenuation, rng)) {
                 attenuation *= materialAttenuation;
                 currentRay = scattered;
             } else {

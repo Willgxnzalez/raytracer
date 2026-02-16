@@ -14,7 +14,7 @@ struct HitRecord {
     Vec3 normal; // outward surface normal
     float t;
     bool frontFace;
-    const Material* material;
+    int materialIndex;
 
     inline void setFaceNormal(const Vec3& rayDirection, const Vec3& outwardNormal) {
         assert(std::abs(outwardNormal.lengthSquared() - 1.0f) < 1.01f); // 1% allowance
