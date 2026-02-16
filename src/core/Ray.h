@@ -2,7 +2,7 @@
 #include "core/Vec3.h"
 
 /**
- * Ray - Half-line defined by origin and direction.
+ * Ray - Half-line defined by origin and unit direction.
  * Formula: P(t) = origin + t * direction, where t >= 0.
  */
 struct Ray {

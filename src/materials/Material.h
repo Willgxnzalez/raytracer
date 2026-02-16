@@ -1,30 +1,28 @@
 #pragma once
+
 #include "core/Ray.h"
 #include "core/Vec3.h"
 #include "util/RNG.h"
 
-struct HitRecord; // forward declare
+
+enum class MaterialType : uint8_t {
+    Diffuse,    // Pure Lambertian
+    Metal,      // Perfect Mirror or rough metal
+    Physical,   // Diffuse + Specular
+    Dielectric, // Transparent material that refracts and refrects light
+    Emissive
+};
 
 /**
- * Material - interface for describing light interaction on a surface.
+ * Material - Describes light interaction on a surface.
  */
 struct Material {
-    virtual ~Material() = default;
+    MaterialType type;
+    Color color;
 
-    /**
-     * Compute how light scatters when hitting this material.
-     * 
-     * @param record Surface intersection details (position, normal, etc.)
-     * @param rayIn Incoming ray that hit the surface
-     * @param rayOut Output: scattered/reflected ray direction
-     * @param attenuation Output: color absorption (how much light is kept vs absorbed)
-     * @return true if ray scatters, false if ray is absorbed (stops bouncing)
-     */
-    virtual bool scatter(
-        const HitRecord& record, 
-        const Ray& rayIn, 
-        Ray& rayOut,
-        Color& attenuation,
-        RNG& rng 
-    ) const = 0;
+    float roughness; 
+    float metallic;  // 0.0 = pure diffuse, 1.0 = pure metal
+    float ior;       // Index of refraction: how much light bends (air=1.0, water=1.33, glass=1.5, diamond=2.4)
+
+    Color emission;
 };
