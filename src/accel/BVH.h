@@ -1,37 +1,39 @@
 #pragma once
+
 #include "accel/AABB.h"
-#include "geometry/Hittable.h"
+#include "core/HitRecord.h"
+#include "core/Vec3.h"
+#include "core/Ray.h"
 #include <vector>
 
+class Scene;  // Forward declare
+
+static constexpr int InvalidNode = -1;
+
 /**
- * BVH Node - internal representation
- * Each node either contains two children or references a primitive (leaf)
+ * BVH Node - contains two children or references a primitive (leaf)
  */
 struct BVHNode {
-    int left = -1;       // Index of left child (-1 if leaf)
-    int right = -1;      // Index of right child (-1 if leaf)
-    int primitive = -1;  // Index into primitives array (-1 if internal node)
-    
+    int left;            // Index of left child (-1 if leaf)
+    int right;           // Index of right child (-1 if leaf)
+    int primitiveIndex;  // Index into primitives array
+
     AABB box;
 
-    bool isLeaf() const { return primitive >= 0; }
+    inline bool isLeaf() const { return primitiveIndex > InvalidNode; }
 };
 
 /**
  * Bounding Volume Hierarchy for ray-scene intersection acceleration
  */
-class BVHTree {    
-    std::vector<BVHNode> nodes_;
-    HittableList primitives_;
-    int rootIndex_ = -1;
-    
+class BVHTree {
 public:
-
     BVHTree() = default;
 
-    void build(const HittableList & objects);
+    void build(const Scene& scene);
 
     bool hit(
+        const Scene& scene,
         HitRecord& record,
         const Ray& ray,
         float tMin,
@@ -43,10 +45,14 @@ public:
     const BVHNode& root();
     
 private:
+    std::vector<BVHNode> nodes_;
+    int rootIndex_ = InvalidNode;
+
     struct BVHBuildEntry {
         int primitiveIndex;
         AABB box;
+        Point3 centroid;
     };
 
-    int buildTree(std::vector<BVHBuildEntry>& prims, size_t start, size_t end);
+    int buildTree(std::vector<BVHBuildEntry>& entries, size_t start, size_t end);
 };
