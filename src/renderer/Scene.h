@@ -1,30 +1,52 @@
 #pragma once
 #include "accel/BVH.h"
+#include "geometry/Sphere.h"
+#include "materials/Material.h"
+#include "core/Vec3.h"
+#include <vector>
+#include <cstdint>
 
 /**
  * Scene - Owns scene geometry and BVH acceleration structure
  */
 class Scene {
-    HittableList objects;
-    BVHTree bvh;
-
 public:
-    Scene() = default;
-
-    void add(std::shared_ptr<Hittable> object) {
-        objects.push_back(object);
-    }
-
-    void build() {
-        bvh.build(objects);
-    }
-
+    enum class PrimitiveType : uint8_t {
+        Sphere,
+        Triangle,
+        Plane
+    };
+    
+    struct PrimitiveRef {
+        PrimitiveType type;
+        int index;
+    };
+    
+    // Material creation
+    int addDiffuse(const Color& albedo);
+    int addDielectric(float ior);
+    
+    // Geometry creation
+    int addSphere(const Point3& center, float radius, int materialIndex);
+    
+    // Build acceleration structure
+    void build();
+    
     bool intersect(
-        HitRecord& record,
+        HitRecord& record, 
         const Ray& ray, 
         float tMin, 
         float tMax
-    ) const {
-        return bvh.hit(record, ray, tMin, tMax);
-    }
+    ) const;
+    
+    // Read-only access
+    const std::vector<Sphere>& getSpheres() const { return spheres_; }
+    const std::vector<Material>& getMaterials() const { return materials_; }
+    const std::vector<PrimitiveRef>& getPrimitives() const { return primitives_; }
+    
+private:
+    std::vector<Sphere> spheres_;
+    std::vector<Material> materials_;
+    std::vector<PrimitiveRef> primitives_;
+    BVHTree bvh_;
 };
