@@ -5,30 +5,25 @@
 #include "materials/Material.h"
 #include <atomic>
 
-Sphere::Sphere(const Point3& center, float radius, const Material* material) : 
-    center(center), 
-    radius(radius), 
-    material(material) 
-{}
-
-bool Sphere::hit(
+bool sphereHit(
+    const Sphere& sphere,
     HitRecord& record,
     const Ray& ray, 
     float tMin, 
     float tMax
-) const {
+) {
     // Points on sphere: |P - C|^2 = r^2 -> point P on sphere if its distance from center C is equal to radius
     // Points on ray:     P = O + tD 
     // Substitute: |O + tD - C|^2 = r^2
     // Rearrange: |(O - C) + tD|^2 = r^2 where (O - C) becomes vector oc
     // Expand: (D·D)t^2 + 2(D·oc)t + (oc·oc - r^2) = 0
     // Use "half-b" quadratic formula t = (-(b/2) +/- sqrt((b/2)^2-ac)) / a
-    Vec3 oc = ray.origin - center;
+    Vec3 oc = ray.origin - sphere.center;
     
     // Discriminant = (b/2)^2-ac
     float a = 1.0f; // dot(ray.direction, ray.direction)
     float halfB = dot(ray.direction, oc);
-    float c = dot(oc, oc) - radius * radius;
+    float c = dot(oc, oc) - sphere.radius * sphere.radius;
     float discriminant = halfB * halfB - a * c;
 
     if (discriminant < 0) return false;
@@ -45,12 +40,17 @@ bool Sphere::hit(
 
     record.t = t;
     record.position = ray.at(t);
-    Vec3 outwardNormal = (record.position - center).normalized();
+    Vec3 outwardNormal = (record.position - sphere.center).normalized();
     record.setFaceNormal(ray.direction, outwardNormal);
-    record.material = material;
+    record.materialIndex = sphere.materialIndex;
     return true;
 }
 
-AABB Sphere::boundingBox() const {
-    return AABB{center - Vec3{radius, radius, radius}, center + Vec3{radius, radius, radius}};
+AABB sphereBounds(const Sphere& sphere) {
+    Point3 center = sphere.center;
+    float radius = sphere.radius;
+    return AABB{
+        center - Vec3{radius, radius, radius}, 
+        center + Vec3{radius, radius, radius}
+    };
 }

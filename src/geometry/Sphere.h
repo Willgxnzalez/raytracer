@@ -1,26 +1,25 @@
 #pragma once
-#include "geometry/Hittable.h"
-#include "core/Vec3.h"
 
-struct Material; // forward declare
+#include "core/HitRecord.h"
+#include "core/Vec3.h"
+#include "core/Ray.h"
+#include "accel/AABB.h"
 
 /**
  * Sphere - A perfectly round 3D geometric primitive defined by a center point and radius.
  */
-struct Sphere : public Hittable {
+struct Sphere {
     Point3 center;
     float radius;
-    const Material* material;
-
-    Sphere(const Point3& center, float radius, const Material* material);
-
-    bool hit(
-        HitRecord& record,
-        const Ray& ray, 
-        float tMin, 
-        float tMax
-    ) const override;
-
-    AABB boundingBox() const override;
+    int materialIndex;
 };
 
+bool sphereHit(
+    const Sphere& sphere, 
+    HitRecord& record,
+    const Ray& ray, 
+    float tMin, 
+    float tMax
+);
+
+AABB sphereBounds(const Sphere& sphere);
