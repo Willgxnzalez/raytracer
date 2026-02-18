@@ -13,6 +13,7 @@ struct Vec3 {
     float x, y, z;
 
     Vec3() = default;
+    Vec3(float i) : x(i), y(i), z(i) {}
     Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 
     float length() const {
