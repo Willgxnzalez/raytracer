@@ -20,7 +20,7 @@
  */
 Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth) {
     Ray currentRay = ray;
-    Color attenuation(1.0f, 1.0f, 1.0f); // Start with full intensity white light
+    Color throughput(1.0f, 1.0f, 1.0f); // Start with full intensity white light
     float SHADOW_EPS = 1e-2f; // prevent self intersections
 
     const auto& materials = scene.getMaterials();
@@ -30,17 +30,16 @@ Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth) {
             Ray scattered;
             Color materialAttenuation;
             if (scatter(materials[rec.materialIndex], rec, currentRay, scattered, materialAttenuation, rng)) {
-                attenuation *= materialAttenuation;
+                throughput *= materialAttenuation;
                 currentRay = scattered;
             } else {
                 return Color(0.0f, 0.0f, 0.0f); // Ray absorbed - return black
             }
         } else {
             // Hit background - compute and return final color
-            Vec3 unitDir = currentRay.direction.normalized();
-            float t = 0.5 * (unitDir.y + 1.0);
-            Color backgroundColor = (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0);
-            return attenuation * backgroundColor;
+            float t = 0.5 * (currentRay.direction.y + 1.0); // Map [-1, 1] to [0, 1]
+            Color backgroundColor = lerp(Vec3(1.0, 1.0, 1.0), Vec3(0.5, 0.7, 1.0), t);
+            return throughput * backgroundColor;
         }
     }
     return Color(0.0f, 0.0f, 0.0f); // Max depth reached - return black (absorbed by bounces)
