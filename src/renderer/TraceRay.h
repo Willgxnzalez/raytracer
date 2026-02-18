@@ -9,8 +9,10 @@
 #include <cmath>
 
 /**
- * Compute the color of a ray by iteratively tracing it through the scene, accumulating color from surface interactions
- * and material scattering through multiplicative attenuation until hitting the background or reaching max depth.
+ * traceRay - Iterative Monte Carlo path tracing 
+ * 
+ * Computes the color of a ray by tracing it through the scene, accumulating color from surface interactions
+ * and material scattering until hitting the background or reaching max depth.
  * 
  * @param ray Initial ray to trace
  * @param scene World containing all hittable objects
@@ -18,7 +20,7 @@
  * @param maxDepth Maximum number of bounces allowed
  * @return Final color accumulated along the ray path
  */
-Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth) {
+inline Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth) {
     Ray currentRay = ray;
     Color throughput(1.0f, 1.0f, 1.0f); // Start with full intensity white light
     float SHADOW_EPS = 1e-2f; // prevent self intersections
