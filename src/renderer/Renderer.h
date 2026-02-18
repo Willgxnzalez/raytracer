@@ -13,7 +13,7 @@ public:
         int imageWidth, 
         int imageHeight, 
         int samplesPerPixel, 
-        int tileSize = 16, 
+        int tileSize = 32, 
         int maxDepth = 5
     );
 

@@ -21,25 +21,27 @@
  * @return Final color accumulated along the ray path
  */
 inline Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth) {
-    Ray currentRay = ray;
+    Ray current = ray;
     Color throughput(1.0f, 1.0f, 1.0f); // Start with full intensity white light
     float SHADOW_EPS = 1e-2f; // prevent self intersections
 
     const auto& materials = scene.getMaterials();
     for (int depth = 0; depth < maxDepth; ++depth) {
-        HitRecord rec;
-        if (scene.intersect(rec, currentRay, SHADOW_EPS, INFINITY)) {
+        HitRecord record;
+        if (scene.intersect(record, current, SHADOW_EPS, INFINITY)) {
             Ray scattered;
             Color materialAttenuation;
-            if (scatter(materials[rec.materialIndex], rec, currentRay, scattered, materialAttenuation, rng)) {
-                throughput *= materialAttenuation;
-                currentRay = scattered;
-            } else {
-                return Color(0.0f, 0.0f, 0.0f); // Ray absorbed - return black
-            }
+
+            BSDFSample sample = sampleMaterial(materials[record.materialIndex], record, -current.direction, rng);
+            if (sample.pdf <= 0.0f) break;
+
+            float cosTheta = std::abs(dot(record.normal, sample.wi));
+            throughput *= sample.brdf * cosTheta / sample.pdf; // Monte Carlo estimator: BRDF * cos(theta) / pdf
+
+            current = Ray{record.position, sample.wi};
         } else {
             // Hit background - compute and return final color
-            float t = 0.5 * (currentRay.direction.y + 1.0); // Map [-1, 1] to [0, 1]
+            float t = 0.5 * (current.direction.y + 1.0); // Map [-1, 1] to [0, 1]
             Color backgroundColor = lerp(Vec3(1.0, 1.0, 1.0), Vec3(0.5, 0.7, 1.0), t);
             return throughput * backgroundColor;
         }
