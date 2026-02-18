@@ -14,6 +14,26 @@ struct BSDFSample {
     float pdf;      // Probability of choosing sampled direction
 };
 
+// Orthonormal Basis (ONB) - a local coordinate frame aligned to a surface normal.
+// Transform sampled directions from local space to world space,
+// where w is the surface normal, and u/v are perpendicular tangent vectors.
+struct ONB {
+    Vec3 u, v, w;
+
+    ONB(const Vec3& normal) {
+        w = normal;
+        // Choose an arbitrary vector not parallel to w to build the basis
+        Vec3 a = (std::abs(w.x) > 0.9f) ? Vec3(0,1,0) : Vec3(1,0,0);
+        v = cross(w, a).normalized();
+        u = cross(w, v);
+    }
+
+    // Transforms a direction from local (ONB) space to world space
+    Vec3 toWorld(const Vec3& local) const {
+        return local.x * u + local.y * v + local.z * w;
+    }
+};
+
 /**
  * Compute how light scatters when hitting this material.
  * 
