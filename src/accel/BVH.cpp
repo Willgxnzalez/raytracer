@@ -95,13 +95,13 @@ bool BVHTree::hit(
     bool hitAnything = false;
     float closest = tMax;
 
-    std::stack<int> stack;
-    stack.push(rootIndex_);
+    int stack[64]; // Tree with 64 levels could hold 2^64 leaf nodes = 1.8x10^19 objects
+    int stackPtr = 0; // Next available spot
+    stack[stackPtr++] = rootIndex_;
 
     // Traverse tree until primitive hitbox is found
-    while (!stack.empty()) {
-        int nodeIndex = stack.top();
-        stack.pop();
+    while (stackPtr > 0) {
+        int nodeIndex = stack[--stackPtr];
 
         const BVHNode& node = nodes_[nodeIndex];
         const auto& prim = scene.getPrimitives()[node.primitiveIndex];
@@ -117,8 +117,8 @@ bool BVHTree::hit(
                     }
             }
         } else {
-            stack.push(node.right);
-            stack.push(node.left);
+            stack[stackPtr++] = node.right;
+            stack[stackPtr++] = node.left;
         }
     }
 

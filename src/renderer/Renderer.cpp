@@ -30,6 +30,7 @@ void Renderer::render(const Camera& camera, const Scene& scene, const std::strin
     auto start = high_resolution_clock::now();
 
     int numThreads = std::thread::hardware_concurrency();
+    std::cout << "Running Renderer with " << numThreads << " threads." << std::endl; 
     std::vector<std::thread> threads;
 
     for (int i = 0; i < numThreads; ++i) {
