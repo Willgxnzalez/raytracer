@@ -117,6 +117,10 @@ inline Vec3 cross(const Vec3& a, const Vec3& b) { // Gives Vector perpendicular 
                 a.x * b.y - a.y * b.x);
 }
 
+inline Vec3 lerp(const Vec3&a, const Vec3& b, float t) {
+    return (1 - t) * a + t * b;
+}
+
 inline std::ostream & operator << ( std::ostream & out, Vec3 v) {
     out << "[" << v.x << ", " << v.y << ", " << v.z << "]";
     return out;
