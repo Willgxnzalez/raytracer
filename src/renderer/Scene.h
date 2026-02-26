@@ -26,6 +26,7 @@ public:
     int addDiffuse(const Color& color);
     int addMetal(const Color& color, float roughness = 0.0f);
     int addDielectric(float ior);
+    int addEmissive(const Color& color);
     
     // Geometry creation
     int addSphere(const Point3& center, float radius, int materialIndex);

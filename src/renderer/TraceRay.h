@@ -3,8 +3,7 @@
 #include "core/Ray.h"
 #include "core/Vec3.h"
 #include "core/HitRecord.h"
-#include "materials/Material.h"
-#include "materials/Scatter.h"
+#include "materials/BSDF.h"
 #include "util/RNG.h"
 #include <cmath>
 
@@ -12,7 +11,8 @@
  * traceRay - Iterative Monte Carlo path tracing 
  * 
  * Computes the color of a ray by tracing it through the scene, accumulating color from surface interactions
- * and material scattering until hitting the background or reaching max depth.
+ * and material scattering until hitting the background or reaching max depth. 
+ * Rendering is probability-weighted energy transport.
  * 
  * @param ray Initial ray to trace
  * @param scene World containing all hittable objects
@@ -29,14 +29,17 @@ inline Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth
     for (int depth = 0; depth < maxDepth; ++depth) {
         HitRecord record;
         if (scene.intersect(record, current, SHADOW_EPS, INFINITY)) {
-            Ray scattered;
-            Color materialAttenuation;
+            const Material& material = materials[record.materialIndex];
+            if (material.type == MaterialType::Emissive) {
+                return throughput * material.emission;
+            }
 
-            BSDFSample sample = sampleMaterial(materials[record.materialIndex], record, -current.direction, rng);
+            BSDFSample sample = sampleMaterial(material, record, -current.direction, rng);
             if (sample.pdf <= 0.0f) break;
 
-            float cosTheta = std::abs(dot(record.normal, sample.wi));
-            throughput *= sample.brdf * cosTheta / sample.pdf; // Monte Carlo estimator: BRDF * cos(theta) / pdf
+            float cosTheta = dot(record.normal, sample.wi);
+            if (cosTheta <= 0.0f) break;
+            throughput *= sample.f * cosTheta / sample.pdf; // Monte Carlo estimator: BRDF * cos(theta) / pdf
 
             current = Ray{record.position, sample.wi};
         } else {

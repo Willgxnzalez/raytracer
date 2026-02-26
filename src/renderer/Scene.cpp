@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include <algorithm>
 
 int Scene::addDiffuse(const Color& color) {
     Material m{};
@@ -7,7 +8,7 @@ int Scene::addDiffuse(const Color& color) {
     m.roughness = 0.0f;
     m.metallic = 0.0f;
     m.ior = 1.0f;
-    m.emission = Color{0.0f, 0.0f, 0.0f};
+    m.emission = Color{0.0f};
 
     materials_.push_back(m);
     return static_cast<int>(materials_.size() - 1);
@@ -17,24 +18,36 @@ int Scene::addMetal(const Color& color, float roughness) {
     Material m{};
     m.type = MaterialType::Metal;
     m.color = color;
-    m.roughness = roughness;
-    m.metallic = 0.0f;
+    m.roughness = std::clamp(roughness, 0.0f, 1.0f);
+    m.metallic = 1.0f;
     m.ior = 1.0f;
-    m.emission = Color{0.0f, 0.0f, 0.0f};
+    m.emission = Color{0.0f};
 
     materials_.push_back(m);
     return static_cast<int>(materials_.size() - 1);
 }
 
-int Scene::addDielectric(float indexOfRefraction)
-{
+int Scene::addDielectric(float indexOfRefraction) {
     Material m{};
     m.type = MaterialType::Dielectric;
-    m.color = Vec3(1.0f, 1.0f, 1.0f);
+    m.color = Color{1.0f};
     m.roughness = 0.0f;
     m.metallic = 0.0f;
     m.ior = indexOfRefraction;
-    m.emission = Color{0.0f, 0.0f, 0.0f};
+    m.emission = Color{0.0f};
+
+    materials_.push_back(m);
+    return static_cast<int>(materials_.size() - 1);
+}
+
+int Scene::addEmissive(const Color& color) {
+    Material m{};
+    m.type = MaterialType::Emissive;
+    m.color = Color{0.0f};
+    m.roughness = 0.0f;
+    m.metallic = 0.0f;
+    m.ior = 1.0f;
+    m.emission = color;
 
     materials_.push_back(m);
     return static_cast<int>(materials_.size() - 1);
