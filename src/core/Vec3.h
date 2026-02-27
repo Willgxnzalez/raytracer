@@ -13,6 +13,7 @@ struct Vec3 {
     float x, y, z;
 
     Vec3() = default;
+    Vec3(float i) : x(i), y(i), z(i) {}
     Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 
     float length() const {
@@ -115,6 +116,10 @@ inline Vec3 cross(const Vec3& a, const Vec3& b) { // Gives Vector perpendicular 
     return Vec3(a.y * b.z - a.z * b.y,
                 a.z * b.x - a.x * b.z,
                 a.x * b.y - a.y * b.x);
+}
+
+inline Vec3 lerp(const Vec3&a, const Vec3& b, float t) {
+    return (1 - t) * a + t * b;
 }
 
 inline std::ostream & operator << ( std::ostream & out, Vec3 v) {

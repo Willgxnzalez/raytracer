@@ -5,11 +5,11 @@
 #include <iostream>
 
 float degreesToRadians(float degrees) {
-    return degrees * (std::numbers::pi / 180);
+    return degrees * (std::numbers::pi_v<float> / 180);
 }
 
 Point3 randomPointOnUnitDisk(RNG& rng) { // in x-y plane
-    float angle = rng.uniform(0.0f, 2.0f * std::numbers::pi);
+    float angle = rng.uniform(0.0f, 2.0f * std::numbers::pi_v<float>);
     float radius = rng.uniform01();
     return Point3{std::cos(angle) * radius, std::sin(angle) * radius, 0.0f};
 }
