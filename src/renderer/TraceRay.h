@@ -34,12 +34,17 @@ inline Color traceRay(const Ray& ray, const Scene& scene, RNG& rng, int maxDepth
                 return throughput * material.emission;
             }
 
-            BSDFSample sample = sampleMaterial(material, record, -current.direction, rng);
+            BSDFSample sample = BSDF_Sample(material, record, -current.direction, rng);
             if (sample.pdf <= 0.0f) break;
 
-            float cosTheta = dot(record.normal, sample.wi);
-            if (cosTheta <= 0.0f) break;
-            throughput *= sample.f * cosTheta / sample.pdf; // Monte Carlo estimator: BRDF * cos(theta) / pdf
+            float cosTheta = std::abs(dot(record.normal, sample.wi));
+
+            if (material.type == MaterialType::Dielectric)
+                throughput *= sample.f; // just Color(1) — no cos, no pdf division
+            else {
+                if (cosTheta <= 0.0f) break;
+                throughput *= sample.f * cosTheta / sample.pdf;
+            }
 
             current = Ray{record.position, sample.wi};
         } else {

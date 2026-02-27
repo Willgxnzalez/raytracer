@@ -13,8 +13,8 @@ int main() {
     // Image
     const int imageWidth = 800;
     const int imageHeight = 640;
-    const int samplesPerPixel = 50;
-    const int maxDepth = 5;
+    const int samplesPerPixel = 75;
+    const int maxDepth = 8;
 
     // Scene
     Scene world;
@@ -31,29 +31,28 @@ int main() {
     int brown = world.addDiffuse(Color(0.6f, 0.4f, 0.2f));
     int colors[] = {red, blue, yellow, green, cyan, purple, orange};
 
-    // int glass = world.addDielectric(1.5f);
+    int glass = world.addDielectric(1.5f);
 
-    int gold = world.addMetal(Color(1.0, 0.78, 0.34), 0.5f);\
+    int gold = world.addMetal(Color(1.0, 0.78, 0.34));
 
     int light = world.addEmissive(Color(1.0f));
 
-    // int plastic = world.addPhysical(Color(0.4f, 0.4f, 0.4f), 0.3f, 0.3f );
+    int plastic = world.addPhysical(Color(0.4f, 0.4f, 0.4f), 0.3f, 0.3f );
 
-    // Ground plane
     world.addSphere(Color(0.0f, -1000.0f, 0.0f), 1000.0f, ground);
 
-    // world.addSphere(Point3(-0.6f, 1.0f, -3.0f), 1.0f, glass);
+    world.addSphere(Point3(-0.6f, 1.0f, -3.0f), 1.0f, glass);
     world.addSphere(Point3(0.0f, 1.0f, -2.0f), 1.0f, brown);
     world.addSphere(Point3(0.6f, 1.0f, -1.0f), 1.0f, gold);
+    world.addSphere(Point3(1.2f, 1.0f, 0.0f), 1.0f, plastic);
 
-    world.addSphere(Point3(0.0f, 1.5f, -0.5f), 0.3f, light);
-    // world.addSphere(Point3(1.2f, 1.0f, 0.0f), 1.0f, plastic);
+    world.addSphere(Point3(0.0f, 3.0f, -0.5f), 0.3f, light);
 
     // Hero sphere positions
     Point3 heroPositions[] = {
-        Point3(-1.0f, 1.0f, -3.0f),
+        Point3(-0.6f, 1.0f, -3.0f),
         Point3(0.0f, 1.0f, -2.0f),
-        Point3(1.0f, 1.0f, -1.0f),
+        Point3(0.6f, 1.0f, -1.0f),
         Point3(1.2f, 1.0f, 0.0f)
     };
     
